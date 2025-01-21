@@ -9,4 +9,9 @@ class Work extends Model
 {
     /** @use HasFactory<\Database\Factories\WorkFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'genre',
+        'title'
+    ];
 }

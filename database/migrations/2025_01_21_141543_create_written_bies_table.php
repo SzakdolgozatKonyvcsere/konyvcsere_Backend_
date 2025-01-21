@@ -12,11 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('written_bies', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('work')->references('id')->on('works');
             $table->foreignId('author')->references('id')->on('authors');
-            $table->primary(['work', 'author']);
             $table->timestamps();
+            $table->primary(['work', 'author']);
         });
     }
 

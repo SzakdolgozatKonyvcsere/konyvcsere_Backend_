@@ -9,4 +9,11 @@ class WrittenBy extends Model
 {
     /** @use HasFactory<\Database\Factories\WrittenByFactory> */
     use HasFactory;
+
+    public $incrementing = false;
+    protected $primaryKey = null;
+    protected $fillable = [
+        'mu',
+        'szerzo'
+    ];
 }

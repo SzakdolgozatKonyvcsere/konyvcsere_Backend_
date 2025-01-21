@@ -9,4 +9,9 @@ class Dictionary extends Model
 {
     /** @use HasFactory<\Database\Factories\DictionaryFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'type', // pl: minoseg | csere allapot
+        'value' // pl: hasznalt | elcserelve
+    ];
 }

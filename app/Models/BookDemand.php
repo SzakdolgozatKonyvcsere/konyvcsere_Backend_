@@ -9,4 +9,14 @@ class BookDemand extends Model
 {
     /** @use HasFactory<\Database\Factories\BookDemandFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'user',
+        'publisher',
+        'work',
+        'language',
+        'min_publication_year',
+        'max_publication_year',
+        'demand_status',
+    ];
 }

@@ -9,4 +9,11 @@ class ExchangeHistory extends Model
 {
     /** @use HasFactory<\Database\Factories\ExchangeHistoryFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'interested_user',
+        'desired_idem',
+        'offered_item',
+        'exchange_status'
+    ];
 }
