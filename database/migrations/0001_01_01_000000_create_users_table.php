@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('full_name');
+            $table->string('city');
+            $table->string('tel');
+            $table->smallInteger('role')->default(1); // 0 - Admin | 1 - User | ...
+            //$table->string('img_url')->default('https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid');
             $table->rememberToken();
             $table->timestamps();
         });
