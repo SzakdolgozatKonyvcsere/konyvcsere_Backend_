@@ -17,7 +17,8 @@ class DictionaryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'type' => fake() -> unique() -> word(),
+            'value' => fake()->word()
         ];
     }
 }

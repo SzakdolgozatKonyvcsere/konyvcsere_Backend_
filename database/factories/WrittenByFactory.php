@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Author;
+use App\Models\Publisher;
+use App\Models\Work;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,9 @@ class WrittenByFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'work' => Work::inRandomOrder()->value('work_id'),
+            'author' => Author::inRandomOrder()->value('author_id')
+        
         ];
     }
 }

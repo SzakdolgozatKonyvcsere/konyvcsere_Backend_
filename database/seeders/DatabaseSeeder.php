@@ -2,7 +2,16 @@
 
 namespace Database\Seeders;
 
+use App\Models\Author;
+use App\Models\BookDemand;
+use App\Models\BookOffer;
+use App\Models\Dictionary;
+use App\Models\ExchangeHistory;
+use App\Models\Genre;
+use App\Models\Publisher;
 use App\Models\User;
+use App\Models\Work;
+use App\Models\WrittenBy;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -19,7 +28,7 @@ class DatabaseSeeder extends Seeder
         /*User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-        ]);
+        ]);*/
         User::factory()->create([
             'user_name' => 'admin_michael',
             'email' => 'michael@admin.com',
@@ -47,6 +56,35 @@ class DatabaseSeeder extends Seeder
             'tel' => fake()->phoneNumber(),
             'remember_token' => Str::random(30),
             'role' => 1
-        ]);*/
+        ]);
+
+        $genres = [
+            'Regény',
+            'Sci-fi',
+            'Történelmi',
+            'Krimi',
+            'Fantasy',
+            'Dráma',
+            'Gyermekirodalom',
+            'Vers',
+            'Életrajz',
+            'Tudományos'
+        ];
+
+        foreach ($genres as $genreName) {
+            Genre::factory()->create([
+                'genre_name' => $genreName,
+            ]);
+        }
+
+
+        Publisher::factory(10)->create();
+        Author::factory(10)->create();
+        Work::factory(10)->create();
+        WrittenBy::factory(5)->create();
+        BookDemand::factory(10)->create();
+        BookOffer::factory(10)->create();
+        ExchangeHistory::factory(6)->create();
+        Dictionary::factory(10)->create();
     }
 }

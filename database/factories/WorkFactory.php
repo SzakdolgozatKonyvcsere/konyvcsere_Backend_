@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Genre;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class WorkFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'genre_id' => Genre::all()->random()->genre_id,
+            'title' =>fake()->sentence(2)
         ];
     }
 }

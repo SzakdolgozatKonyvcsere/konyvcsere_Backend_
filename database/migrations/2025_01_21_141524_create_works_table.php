@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('works', function (Blueprint $table) {
             $table->id('work_id');
-            $table->foreignId('work')->references('genre_id')->on('genres');
+            $table->foreignId('genre_id')->references('genre_id')->on('genres');
             $table->string('title');
             $table->timestamps();
         });

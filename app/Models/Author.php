@@ -10,7 +10,6 @@ class Author extends Model
 {
     /** @use HasFactory<\Database\Factories\AuthorFactory> */
     use HasFactory;
-    //use Notifiable;
 
     protected $fillable = ['szerzo_nev'];
 }
