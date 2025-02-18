@@ -27,7 +27,7 @@ class RegisteredUserController extends Controller
             'full_name' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
             'tel' => ['nullable', 'string', 'max:20'],
-            'remember_token' => ['string', 'max:50'],
+            //'remember_token' => ['string', 'max:50'],
             'role' => ['integer'],
             //'img_url' => ['nullable', 'url'],
         ]);
@@ -39,8 +39,8 @@ class RegisteredUserController extends Controller
             'full_name' => $request->full_name,
             'city' => $request->city,
             'tel' => $request->tel,
-            'remember_token' => $request->remember_token,
-            'role' => $request->role,
+            //'remember_token' => $request->remember_token,
+            'role' => 1,
             //'img_url' => $request->img_url,
         ]);
 
