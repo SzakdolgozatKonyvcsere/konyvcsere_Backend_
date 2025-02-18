@@ -18,7 +18,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
-    Route::get('/users', [UserController::class, 'getUsers']);
+    Route::get('/admin/users', [UserController::class, 'getUsers']);
 });
 
 Route::get('/users', [UserController::class, 'getUsers']);
