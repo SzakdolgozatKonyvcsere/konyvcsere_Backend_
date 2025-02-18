@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);*/
         User::factory()->create([
-            'user_name' => 'admin_michael',
+            'name' => 'admin_michael',
             'email' => 'michael@admin.com',
             'password' => 'michael12345',
             'full_name' => 'Sir Michael Adminsson',
@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'user_name' => 'test_sophia',
+            'name' => 'test_sophia',
             'email' => 'sophia@test.com',
             'password' => 'sophia12345',
             'full_name' => 'Sophia Tucker',
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
             'role' => 1
         ]);
         User::factory()->create([
-            'user_name' => 'test_andrew',
+            'name' => 'test_andrew',
             'email' => 'andrew@test.com',
             'password' => 'andrew12345',
             'full_name' => 'Andrew Smith',
