@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('works', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('work')->references('id')->on('genres');
+            $table->id('work_id');
+            $table->foreignId('work')->references('genre_id')->on('genres');
             $table->string('title');
             $table->timestamps();
         });

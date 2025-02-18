@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('book_demands', function (Blueprint $table) {
-            $table->id();
+            $table->id('demand_id');
             $table->foreignId('user')->references('id')->on('users');
-            $table->foreignId('publisher')->references('id')->on('publishers')->nullable();
-            $table->foreignId('work')->references('id')->on('works')->nullable();
+            $table->foreignId('publisher')->references('publisher_id')->on('publishers')->nullable();
+            $table->foreignId('work')->references('work_id')->on('works')->nullable();
             $table->string('language')->nullable();
             $table->integer('min_publication_year')->nullable();
             $table->integer('max_publication_year')->nullable();

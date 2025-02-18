@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('written_bies', function (Blueprint $table) {
-            $table->foreignId('work')->references('id')->on('works');
-            $table->foreignId('author')->references('id')->on('authors');
+            $table->foreignId('work')->references('work_id')->on('works');
+            $table->foreignId('author')->references('author_id')->on('authors');
             $table->timestamps();
             $table->primary(['work', 'author']);
         });

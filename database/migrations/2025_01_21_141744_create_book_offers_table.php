@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('book_offers', function (Blueprint $table) {
-            $table->id();
+            $table->id('offer_id');
             $table->foreignId('user')->references('id')->on('users');
-            $table->foreignId('publisher')->references('id')->on('publishers');
-            $table->foreignId('work')->references('id')->on('works');
+            $table->foreignId('publisher')->references('publisher_id')->on('publishers');
+            $table->foreignId('work')->references('work_id')->on('works');
             $table->string('language');
             $table->integer('publication_year');
             $table->integer('quality');
