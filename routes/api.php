@@ -23,11 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
-<<<<<<< HEAD
-    Route::get('/admin/users', [UserController::class, 'getUsers']);
-=======
     
->>>>>>> 623f0c730b5a777b8336a45671d3823b9ef96ec1
 });
 
 Route::get('/users', [UserController::class, 'index']); // all users
