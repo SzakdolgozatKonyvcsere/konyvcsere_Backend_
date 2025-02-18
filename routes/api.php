@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\BookDemandController;
+use App\Http\Controllers\BookOfferController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BookOfferController;
 use App\Http\Middleware\Admin;
 use App\Models\BookOffer;
 
@@ -13,21 +14,30 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    return $request->user(); // retrieves current user
+});
+
 Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
+<<<<<<< HEAD
     Route::get('/admin/users', [UserController::class, 'getUsers']);
+=======
+    
+>>>>>>> 623f0c730b5a777b8336a45671d3823b9ef96ec1
 });
 
-Route::get('/users', [UserController::class, 'getUsers']);
-Route::get('/user/{id}', [UserController::class, 'getUser']);
+Route::get('/users', [UserController::class, 'index']); // all users
+Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
 
-Route::get('/user/{id}/mu', [BookOfferController::class, 'getBooksForUsers']);
-Route::get('/user-offers/{id}', [UserController::class, 'getUsersBookOffers']); //Given user's book offers
 
-Route::get('/book-requests', [UserController::class, 'requestedBooks']); //Books requested by users
-Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
+//Route::get('/user/{id}/mu', [BookOfferController::class, 'getBooksByUser']);
+Route::get('/book-offers/{id}', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
 
-Route::get('/books', [BookOfferController::class, 'getBooks']);
+Route::get('/book-demands', [BookDemandController::class, 'bookDemands']); //Books requested by users
+//Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
+
+Route::get('/books', [BookOfferController::class, 'index']); // Existing books - non-demand ones
