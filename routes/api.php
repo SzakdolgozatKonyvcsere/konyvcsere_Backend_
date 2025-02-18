@@ -3,10 +3,16 @@
 use App\Http\Controllers\BookDemandController;
 use App\Http\Controllers\BookOfferController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\Admin;
-use App\Models\BookOffer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookOfferController;
+use App\Http\Middleware\Admin;
+use App\Models\BookOffer;
+
+
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    return $request->user();    
+});
 
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
