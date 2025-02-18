@@ -5,7 +5,6 @@ use App\Http\Controllers\BookOfferController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BookOfferController;
 use App\Http\Middleware\Admin;
 use App\Models\BookOffer;
 
