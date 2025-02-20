@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\DB;
 
 class BookDemandController extends Controller
 {
-    public function bookDemands()
+    public function bookDemandsWithUsers()
        {
-           $users = DB::table('konyv_keres')
-               ->join('user', 'konyv_keres.user', '=', 'user.id')
-               ->join('mu', 'konyv_keres.mu', '=', 'mu.mu_id')
+           $users = DB::table('book_demands')
+               ->join('user', 'book_demands.user', '=', 'user.id')
+               ->join('works', 'book_demands.work', '=', 'works.work_id')
                ->select(
                    'user.id',
-                   'user.teljes_nev as name',
-                   'konyv_keres.mu as mu_id',
-                   'mu.cim as mu_cim'
+                   'user.full_name as name',
+                   'book_demands.work as work_id',
+                   'works.title'
                )
                ->get();
            return $users; // Usereket felsorolja a keresett konyveiket id-vel es cimmel

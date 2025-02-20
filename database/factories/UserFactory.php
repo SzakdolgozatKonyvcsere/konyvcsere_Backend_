@@ -32,6 +32,8 @@ class UserFactory extends Factory
             'city' => fake()->city(),
             'tel' => fake()->phoneNumber(),
             'role' => 1,
+            'online-status' => 0,
+            'img_url' => "https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid",
             'remember_token' => Str::random(10),
         ];
     }

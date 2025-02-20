@@ -33,7 +33,7 @@ Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single 
 //Route::get('/user/{id}/mu', [BookOfferController::class, 'getBooksByUser']);
 Route::get('/book-offers/{id}', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
 
-Route::get('/book-demands', [BookDemandController::class, 'bookDemands']); //Books requested by users
+Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
 //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
 
 Route::get('/books', [BookOfferController::class, 'index']); // Existing books - non-demand ones

@@ -25,8 +25,9 @@ class User extends Authenticatable
         'full_name',
         'city',
         'tel',
-        'role'
-        //'img_url',
+        'role',
+        'online_status',
+        'img_url'
     ];
 
     /**

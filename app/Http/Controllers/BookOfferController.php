@@ -16,11 +16,11 @@ class BookOfferController extends Controller
 
     // USER > OFFERED BOOKS
     public function getBookOffersByUser($id) {
-        $books = DB::table('konyv_kinal')
-            ->join('mu', 'konyv_kinal.mu', '=', 'mu.mu_id') 
-            ->join('kiado', 'konyv_kinal.kiado', '=', 'kiado.kiado_id') 
-            ->where('konyv_kinal.felhasznalo', '=', $id) 
-            ->select('mu.cim as konyv_cim', 'kiado.kiado_nev as kiado', 'konyv_kinal.konyv_allapot') 
+        $books = DB::table('book_offers')
+            ->join('works', 'book_offers.work', '=', 'works.work_id') 
+            ->join('publishers', 'book_offers.publishers', '=', 'publishers.publisher_id') 
+            ->where('book_offers.user', '=', $id) 
+            ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status') 
             ->get();
     
         return response()->json($books); 
