@@ -14,13 +14,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();    
 });
 
-
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user(); // retrieves current user
-});
-
 Route::middleware(['auth:sanctum'])->group(function () {
-    //post('/booksupload', [BookOfferController::class, 'store']);
+    Route::post('/booksupload', [BookOfferController::class, 'store']);
 
 });
 
