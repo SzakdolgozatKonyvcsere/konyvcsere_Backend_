@@ -38,4 +38,4 @@ Route::get('/book-offers/{id}', [BookOfferController::class, 'getBookOffersByUse
 Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
 //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
 
-Route::get('/books', [BookOfferController::class, 'index']); // Existing books - non-demand ones
+Route::get('/book-offers', [BookOfferController::class, 'index']); // Existing books - non-demand ones

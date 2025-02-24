@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('tel');
             $table->smallInteger('role')->default(1); // 0 - Admin | 1 - User | ...
-            $table->smallInteger('online-status')->default(0); // 0 - Offline | 1 - Online | 2 - Inactive
+            $table->smallInteger('online_status')->default(0); // 0 - Offline | 1 - Online | 2 - Inactive
             $table->string('img_url')->default('https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid');
             $table->rememberToken();
             $table->timestamps();
