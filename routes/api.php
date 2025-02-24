@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
 use App\Models\BookOffer;
 
+use function Pest\Laravel\post;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();    
@@ -19,6 +20,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    post('/booksupload', [BookOfferController::class, 'store']);
 
 });
 
