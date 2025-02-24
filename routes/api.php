@@ -20,7 +20,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    post('/booksupload', [BookOfferController::class, 'store']);
+    //post('/booksupload', [BookOfferController::class, 'store']);
 
 });
 

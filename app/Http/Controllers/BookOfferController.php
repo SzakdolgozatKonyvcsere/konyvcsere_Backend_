@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class BookOfferController extends Controller
-{
+{/*
     public function store(Request $request)
     {
         $request->validate([
@@ -35,7 +35,7 @@ class BookOfferController extends Controller
         ]);
 
         return response()->json($book, 201);
-    }
+    }*/
 
     public function index(){
         $work=BookOffer::all(); // refers to the content of the book.
