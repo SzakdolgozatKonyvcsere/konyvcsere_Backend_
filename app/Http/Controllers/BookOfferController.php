@@ -4,36 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\BookOffer;
 use App\Models\Work;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 class BookOfferController extends Controller
 {
     public function store(Request $request)
     {
+        
         $request->validate([
             'user' => 'required|exists:users,id',
             'publisher' => 'required|string|max:255',
-            //'work' => 'required|exists:works,id',
+            'work_id' => 'required|exists:works,work_id',
             'language' => 'required|string|max:255',
             'publication_year' => 'required|integer',
             'quality' => 'required|integer',
             'book_status' => 'nullable|integer',
             //'img_url' => 'nullable|string',
-            'genre_id' => 'required|exists:genres,genre_id',
-            'title' => 'required|string|max:255'
+            
         ]);
 
-        $work = Work::firstOrCreate([ //--létezik e már
-        //$work = Work::create([
-            ['title' => $request->title], // Adj neki egy címet vagy más adatokat
-            ['genre_id' => $request->genre_id],
-        ]);
+        $work = Work::where('work', $request->work)->first();
+        
 
         $book = BookOffer::create([
             'user' => $request->user,
             'publisher' => $request->publisher,
-            'work' => $work->id,
+            'work_id' => $work->work_id,
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
@@ -43,12 +42,12 @@ class BookOfferController extends Controller
             //'id' => Auth::id(), // Bejelentkezett felhasználó azonosítója
         ]);
 
-     //return response()->json([
-     //   'message' => 'Könyv sikeresen hozzáadva!',
-      //  'book' => $book
-    //], 201);
+    return response()->json([
+        'message' => 'Könyv sikeresen hozzáadva!',
+        'book' => $book
+    ], 201);
 
-       return response()->json($book, 201);
+       //return response()->json($book, 201);
     }
 
     public function index(){
