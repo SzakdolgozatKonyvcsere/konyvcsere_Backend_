@@ -10,6 +10,6 @@ class Genre extends Model
 {
     /** @use HasFactory<\Database\Factories\GenreFactory> */
     use HasFactory;
-
+    protected $primaryKey = 'genre_id';
     protected $fillable = ['genre_name'];
 }
