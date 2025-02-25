@@ -20,13 +20,19 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    //post('/booksupload', [BookOfferController::class, 'store']);
+    
 
 });
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
     
 });
+
+Route::post('/konyvfeltoltes', [BookOfferController::class, 'store']);
+Route::get('/genres', function () {
+    return response()->json(App\Models\Genre::all());
+});
+//Route::get('/genres', [GenreController::class, 'allGenres']);
 
 Route::get('/users', [UserController::class, 'index']); // all users
 Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
