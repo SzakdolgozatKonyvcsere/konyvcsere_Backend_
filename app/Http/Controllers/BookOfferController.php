@@ -67,5 +67,10 @@ class BookOfferController extends Controller
         return response()->json($books); 
     }
 
+    public function viewGetBookOffersAdmin() {
+        $books = DB::table('view_book_offers_admin')->get();
+        return response()->json($books);
+    }
+
 
 }

@@ -13,14 +13,11 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement("
-            CREATE VIEW book_offers_view AS
-            SELECT 
-                works.title,
-                publishers.publisher_name,
-                book_offers.book_status
-            FROM book_offers
-            JOIN works ON book_offers.work = works.work_id
-            JOIN publishers ON book_offers.publishers = publishers.publisher_id
+            CREATE VIEW view_book_demands AS
+            SELECT users.id, users.full_name, book_demands.work AS work_id, works.title
+            FROM book_demands
+            JOIN users ON book_demands.user = users.id
+            JOIN works ON book_demands.work = works.work_id
         ");
     }
 
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_offers_by_user_view');
+        DB::statement('DROP VIEW IF EXISTS view_book_demands');
     }
 };
