@@ -13,6 +13,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->loadMigrationsFrom(database_path('migrations/views'));
+        $this->loadMigrationsFrom(database_path('migrations/triggers'));
         // Added to ensure views migrations
     }
 
