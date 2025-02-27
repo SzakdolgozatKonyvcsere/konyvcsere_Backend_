@@ -13,7 +13,7 @@ class ExchangeHistory extends Model
 
     protected $fillable = [
         'interested_user',
-        'desired_idem',
+        'desired_item',
         'offered_item',
         'exchange_status'
     ];
