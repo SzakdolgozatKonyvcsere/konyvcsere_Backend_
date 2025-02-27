@@ -44,3 +44,6 @@ Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin'
 Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
 //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
 
+
+Route::get('/authorworks/{author_name}', [UserController::class, 'getSzerzoOsszesMuve']);
+

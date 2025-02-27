@@ -28,4 +28,11 @@ class BooksTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_getSzerzoOsszesMuve(): void
+    {
+        $response = $this->get('/api/authorworks/Willa Schoen');
+
+        $response->assertStatus(200);
+    }
 }

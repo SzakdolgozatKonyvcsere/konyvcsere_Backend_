@@ -26,6 +26,21 @@ class BookOfferController extends Controller
             //'img_url' => 'nullable|string',
             
         ]);
+        /*
+        $work = Work::firstOrCreate([ //--létezik e már
+        //$work = Work::create([
+            ['title' => $request->title], // Adj neki egy címet vagy más adatokat
+            ['genre_id' => $request->genre_id],
+        ]);
+        dd($work);*/
+        $work = Work::where('title', $request->title)->first();
+
+if (!$work) {
+    $work = Work::create([
+        'title' => $request->title,
+        'genre_id' => $request->genre_id,
+    ]);
+}
 
         $work = Work::where('work', $request->work)->first();
         
