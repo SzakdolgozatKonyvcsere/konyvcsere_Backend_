@@ -98,20 +98,22 @@ if (!$work) {
 
     public function mostExchangedGenre()
     {
-        $mostExchangedGenre = DB::table('exchange_histories as e')
-        ->join('book_offers as bo', 'e.desired_item', '=', 'bo.offer_id')
-        ->join('works as wo', 'bo.wo', '=', 'wo.work_id') 
-        ->join('genres as ge', 'wo.ge', '=', 'ge.genre_id') 
-        ->where('e.exchange_status', 'a') 
-        ->select('ge.genre_name', DB::raw('COUNT(e.exchange_id) as exchange_count')) 
-        ->groupBy('ge.genre_name') 
-        ->orderByDesc(DB::raw('COUNT(e.exchange_id)')) 
-        ->limit(1) 
-        ->get();
+        // SQL alapú lekérdezés Eloquent kapcsolatok nélkül
+        $mufaj = DB::table('exchange_histories as c')
+            ->select('g.genre_name', DB::raw('count(c.exchange_id) as exchange_number'))
+            ->join('book_offers as bk', 'c.desired_item', '=', 'bk.offer_id')
+            ->join('works as w', 'bk.work', '=', 'w.work_id')
+            ->join('genres as g', 'w.genre_id', '=', 'g.genre_id')
+            ->where('c.exchange_status', 'függőben') // Csak aktív cserék
+            ->groupBy('g.genre_name')
+            ->orderByDesc(DB::raw('count(c.exchange_id)'))
+            ->limit(1) // Csak a legtöbbet elcserélt műfaj
+            ->get();
+
+        return response()->json($mufaj);
+    }
 
 
-    return response()->json($mostExchangedGenre);
-    
-}
+   
 
 }
