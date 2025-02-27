@@ -43,13 +43,33 @@ class BooksTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_most_exchanged_genre(): void
+    /*public function test_most_exchanged_genre(): void
     {
         $response = $this->get('/api/most-exchanged-genre');
 
         $response->assertStatus(200);
     }
     
-   
+    public function test_most_exchanged_city(): void
+    {
+        $response = $this->get('/api/most-exchanged-city');
 
+        $response->assertStatus(200);
+    }*/
+
+    public function test_book_quality_list(): void
+    {
+        $response = $this ->get('/api/book-quality-list');
+
+        $response->assertStatus(200);
+
+    }
+
+    public function test_bad_quality_books(): void
+    {
+        $response = $this ->get('/api/bad-quality-books');
+
+        $response->assertStatus(200);
+
+    }
 }

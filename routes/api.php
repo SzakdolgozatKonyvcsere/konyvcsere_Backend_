@@ -55,3 +55,6 @@ Route::get('/users', [UserController::class, 'index']); // all users
 Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
 Route::get('/inactive-users', [UserController::class, 'inactiveUsers']);
 Route::get('/most-exchanged-genre', [BookOfferController::class, 'mostExchangedGenre']);
+Route::get('/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
+Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']);
+Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);

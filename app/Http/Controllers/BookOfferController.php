@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookOffer;
+use App\Models\ExchangeHistory;
 use App\Models\Work;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
@@ -96,22 +97,60 @@ if (!$work) {
     }
 
 
-    public function mostExchangedGenre()
+    /*public function mostExchangedGenre()
     {
-        $mostExchangedGenre = DB::table('ExchangeHistory as e')
-        ->join('BookOffer as bo', 'e.disered_idem', '=', 'bo.offer_id')
-        ->join('Work as wo', 'bo.wo', '=', 'wo.work_id') 
-        ->join('Genre as ge', 'wo.ge', '=', 'ge.genre_id') 
-        ->where('e.exchange_status', 'a') 
-        ->select('ge.genre_name', DB::raw('COUNT(e.exchange_id) as exchange_count')) 
-        ->groupBy('ge.genre_name') 
-        ->orderByDesc(DB::raw('COUNT(e.exchange_id)')) 
-        ->limit(1) 
-        ->get();
-
-
-    return response()->json($mostExchangedGenre);
     
+        $mostExchangedGenre = ExchangeHistory::join('BookOffer as bo', 'exchange_history.disered_item', '=', 'bo.offer_id')
+            ->join('Work as wo', 'bo.wo', '=', 'wo.work_id')
+            ->join('Genre as ge', 'wo.ge', '=', 'ge.genre_id')
+            ->where('exchange_history.exchange_status', 'a')
+            ->select('ge.genre_name', DB::raw('COUNT(exchange_history.exchange_id) as exchange_count'))
+            ->groupBy('ge.genre_name')
+            ->orderByDesc('exchange_count')  
+            ->limit(1)
+            ->get();
+    
+        return response()->json($mostExchangedGenre);
+    }*/
+
+    /*public function mostExchangedCity()
+    {
+        
+        $maxExchangeCount = ExchangeHistory::join('User as u', 'exchange_history.interested_user', '=', 'u.id')
+            ->where('exchange_history.exchange_status', 'A')
+            ->selectRaw('COUNT(exchange_history.exchange_id) as exchange_count')
+            ->groupBy('u.city')
+            ->orderByDesc(DB::raw('COUNT(exchange_history.exchange_id)'))
+            ->limit(1)
+            ->pluck('exchange_count')
+            ->first(); 
+    
+        
+        $mostExchangedCities = ExchangeHistory::join('User as u', 'exchange_history.interested_user', '=', 'u.id')
+            ->where('exchange_history.exchange_status', 'A')
+            ->select('u.city', DB::raw('COUNT(exchange_history.exchange_id) as exchange_count'))
+            ->groupBy('u.city')
+            ->havingRaw('COUNT(exchange_history.exchange_id) = ?', [$maxExchangeCount])
+            ->orderByDesc(DB::raw('COUNT(exchange_history.exchange_id)'))
+            ->get();
+    
+        return response()->json($mostExchangedCities);
+    }*/
+
+public function bookQualityList()
+{
+    $books = BookOffer::select('offer_id', 'user', 'publisher', 'work', 'language', 'publication_year', 'quality', 'book_status')
+        ->where('quality', '>=', 4);
+
+    return response()->json($books);
+}
+
+public function badQualityBooks()
+{
+    $books = BookOffer::select('offer_id', 'user', 'publisher', 'work', 'language', 'publication_year', 'quality', 'book_status')
+    ->where('quality', '<', 4);
+
+    return response()->json($books);
 }
 
 }
