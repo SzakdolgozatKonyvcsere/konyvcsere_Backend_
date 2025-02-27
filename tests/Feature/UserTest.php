@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -32,4 +33,13 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
     
+    public function test_re_migrate(): void
+    {
+        Artisan::call('migrate:fresh --seed');
+
+        $response = $this->get('/api/users');
+        $response->assertStatus(200);
+    }
+    
+
 }

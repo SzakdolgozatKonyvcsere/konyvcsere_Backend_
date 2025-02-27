@@ -17,7 +17,6 @@ class BooksTest extends TestCase
 
     public function test_book_offers_by_user(): void
     {
-        
         $response = $this->get('/api/book-offers/1');
         
         $response->assertStatus(200);

@@ -52,6 +52,7 @@ class DatabaseSeeder extends Seeder
             'online_status' => 0,
             'img_url' => "https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid"
         ]);
+        
         User::factory()->create([
             'name' => 'test_andrew',
             'email' => 'andrew@test.com',
