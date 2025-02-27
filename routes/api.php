@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\BookDemandController;
 use App\Http\Controllers\BookOfferController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WorkController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
@@ -15,29 +17,30 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    
+    //konyvfeltolteshez:
     //Route::post('/booksupload', [BookOfferController::class, 'store']);
+    Route::post('/mufeltoltes', [WorkController::class, 'store']);
+    //Route::post('/konyvfeltoltes', [BookOfferController::class, 'store']);
+    Route::get('/genres', [GenreController::class, 'index']);
+    
+
+//Route::get('/genres', [GenreController::class, 'allGenres']);
 
 });
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
-    
+
 });
 
-Route::post('/konyvfeltoltes', [BookOfferController::class, 'store']);
-Route::get('/genres', function () {
-    return response()->json(App\Models\Genre::all());
-});
-//Route::get('/genres', [GenreController::class, 'allGenres']);
 
 Route::get('/users', [UserController::class, 'index']); // all users
 Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
 
 
-//Route::get('/user/{id}/mu', [BookOfferController::class, 'getBooksByUser']);
 Route::get('/book-offers/{id}', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
+Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
+
 
 Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
 //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
 
-Route::get('/book-offers', [BookOfferController::class, 'index']); // Existing books - non-demand ones

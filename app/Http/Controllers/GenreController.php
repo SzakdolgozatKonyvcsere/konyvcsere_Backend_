@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 class GenreController extends Controller
 {
     //
-    function allGenre() {
+    
+    function index() {
         return Genre::all();
     } 
 }

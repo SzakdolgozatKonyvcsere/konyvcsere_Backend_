@@ -10,7 +10,7 @@ class BooksTest extends TestCase
 {
     public function test_all_offered_books(): void
     {
-        $response = $this->get('/api/books');
+        $response = $this->get('/api/book-offers');
 
         $response->assertStatus(200);
     }

@@ -4,24 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\BookOffer;
 use App\Models\Work;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 
 class BookOfferController extends Controller
 {
     public function store(Request $request)
     {
+        
         $request->validate([
             'user' => 'required|exists:users,id',
             'publisher' => 'required|string|max:255',
-            //'work' => 'required|exists:works,id',
+            'work_id' => 'required|exists:works,work_id',
             'language' => 'required|string|max:255',
             'publication_year' => 'required|integer',
             'quality' => 'required|integer',
             'book_status' => 'nullable|integer',
             //'img_url' => 'nullable|string',
-            'genre_id' => 'required|exists:genres,genre_id',
-            'title' => 'required|string|max:255'
+            
         ]);
         /*
         $work = Work::firstOrCreate([ //--létezik e már
@@ -39,10 +42,13 @@ if (!$work) {
     ]);
 }
 
+        $work = Work::where('work', $request->work)->first();
+        
+
         $book = BookOffer::create([
             'user' => $request->user,
             'publisher' => $request->publisher,
-            'work' => $work->id,
+            'work_id' => $work->work_id,
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
@@ -52,12 +58,12 @@ if (!$work) {
             //'id' => Auth::id(), // Bejelentkezett felhasználó azonosítója
         ]);
 
-     //return response()->json([
-     //   'message' => 'Könyv sikeresen hozzáadva!',
-      //  'book' => $book
-    //], 201);
+    return response()->json([
+        'message' => 'Könyv sikeresen hozzáadva!',
+        'book' => $book
+    ], 201);
 
-       return response()->json($book, 201);
+       //return response()->json($book, 201);
     }
 
     public function index(){
@@ -69,12 +75,24 @@ if (!$work) {
     public function getBookOffersByUser($id) {
         $books = DB::table('book_offers')
             ->join('works', 'book_offers.work', '=', 'works.work_id') 
-            ->join('publishers', 'book_offers.publishers', '=', 'publishers.publisher_id') 
+            ->join('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
             ->where('book_offers.user', '=', $id) 
             ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status') 
             ->get();
-    
+        //Log::info('User ID:', [$id]);
         return response()->json($books); 
+    }
+
+    public function viewGetBookOffersAdmin(Request $request) {
+        $page = max(1, (int) $request->query('page_number', 1)); // Pagination's default value (1st page)
+        $limit = max(1, (int) $request->query('limit', 5));
+
+        $books = DB::table('view_book_offers_admin')
+            ->offset(($page - 1) * $limit)
+            ->limit($limit)
+            ->get();
+            
+        return response()->json($books);
     }
 
 
