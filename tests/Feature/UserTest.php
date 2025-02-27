@@ -55,6 +55,13 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_inactive_users(): void
+    {
+        $response = $this->get('/api/inactive-users');
+
+        $response->assertStatus(200); 
+    }
+
     
     
 

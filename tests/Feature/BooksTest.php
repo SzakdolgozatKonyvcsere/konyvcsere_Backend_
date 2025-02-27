@@ -42,6 +42,13 @@ class BooksTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_most_exchanged_genre(): void
+    {
+        $response = $this->get('/api/most-exchanged-genre');
+
+        $response->assertStatus(200);
+    }
     
    
 

@@ -62,5 +62,15 @@ class UserController extends Controller
         return response()->json($authors);
     }
 
-    
+
+    public function inactiveUsers()
+    {
+        
+        $inactiveUsers = User::where('online_status', 0)
+            ->select('name', 'email', 'full_name', 'city')
+            ->get();
+
+        return response()->json($inactiveUsers);
+    }
+
 }

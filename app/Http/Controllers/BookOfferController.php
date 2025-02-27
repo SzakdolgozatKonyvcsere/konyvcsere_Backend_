@@ -96,4 +96,22 @@ if (!$work) {
     }
 
 
+    public function mostExchangedGenre()
+    {
+        $mostExchangedGenre = DB::table('ExchangeHistory as e')
+        ->join('BookOffer as bo', 'e.disered_idem', '=', 'bo.offer_id')
+        ->join('Work as wo', 'bo.wo', '=', 'wo.work_id') 
+        ->join('Genre as ge', 'wo.ge', '=', 'ge.genre_id') 
+        ->where('e.exchange_status', 'a') 
+        ->select('ge.genre_name', DB::raw('COUNT(e.exchange_id) as exchange_count')) 
+        ->groupBy('ge.genre_name') 
+        ->orderByDesc(DB::raw('COUNT(e.exchange_id)')) 
+        ->limit(1) 
+        ->get();
+
+
+    return response()->json($mostExchangedGenre);
+    
+}
+
 }
