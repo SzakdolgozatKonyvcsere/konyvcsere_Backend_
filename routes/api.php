@@ -33,15 +33,15 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
 });
 
 
-Route::get('/users', [UserController::class, 'index']); // all users
-Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
 
 
-Route::get('/book-offers/{id}', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
+
+
+
 Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
 
 
-Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
+
 //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
 
 
@@ -49,3 +49,7 @@ Route::get('/authorworks/{author_name}', [UserController::class, 'authorAllWorks
 Route::get('/most-offered-authors', [UserController::class, 'mostOfferedAuthors']);
 Route::get('/most-demanded-authors', [UserController::class, 'mostDemandedAuthors']);
 Route::delete('/book-demand/{k_id}', [BookDemandController::class, 'deleteDemandedBooks']);
+Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
+Route::get('/book-offers/{id}', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
+Route::get('/users', [UserController::class, 'index']); // all users
+Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
