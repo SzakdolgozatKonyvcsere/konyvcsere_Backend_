@@ -40,6 +40,7 @@ class UserTest extends TestCase
         $response = $this->get('/api/users');
         $response->assertStatus(200);
     }
+
     
 
 }
