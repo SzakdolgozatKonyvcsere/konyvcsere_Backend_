@@ -23,4 +23,14 @@ class BookDemandController extends Controller
 
            return $users; // Usereket felsorolja a keresett konyveiket id-vel es cimmel
        }
+
+
+       public function deleteDemandedBooks($k_id)
+       {
+           $deleted = DB::table('book_demands')
+               ->where('demand_id', $k_id)
+               ->delete();
+
+           return $deleted;
+       }
 }

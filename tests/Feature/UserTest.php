@@ -33,6 +33,20 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
     
+    public function test_most_offered_authors(): void
+    {
+        $response = $this->get('/api/most-offered-authors');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_most_demanded_authors(): void
+    {
+        $response = $this->get('/api/most-demanded-authors');
+
+        $response->assertStatus(200);
+    }
+
     public function test_re_migrate(): void
     {
         Artisan::call('migrate:fresh --seed');
@@ -41,6 +55,7 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
+    
     
 
 }

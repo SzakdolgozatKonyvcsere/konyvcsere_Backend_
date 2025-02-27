@@ -12,4 +12,10 @@ class Author extends Model
     use HasFactory;
 
     protected $fillable = ['szerzo_nev'];
+
+    public function writtenbies()
+    {
+        return $this->hasMany(WrittenBy::class);
+    }
 }
+

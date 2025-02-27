@@ -45,5 +45,7 @@ Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers'
 //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
 
 
-Route::get('/authorworks/{author_name}', [UserController::class, 'getSzerzoOsszesMuve']);
-
+Route::get('/authorworks/{author_name}', [UserController::class, 'authorAllWorks']);
+Route::get('/most-offered-authors', [UserController::class, 'mostOfferedAuthors']);
+Route::get('/most-demanded-authors', [UserController::class, 'mostDemandedAuthors']);
+Route::delete('/book-demand/{k_id}', [BookDemandController::class, 'deleteDemandedBooks']);

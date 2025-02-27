@@ -29,10 +29,19 @@ class BooksTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_getSzerzoOsszesMuve(): void
+    public function test_author_all_works(): void
     {
         $response = $this->get('/api/authorworks/Willa Schoen');
 
         $response->assertStatus(200);
     }
+
+    public function test_delete_demanded_book(): void
+    {
+        $response = $this->delete('/api/book-demand/4');
+
+        $response->assertStatus(200);
+    }
+    
+
 }

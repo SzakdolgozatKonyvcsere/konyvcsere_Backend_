@@ -21,4 +21,9 @@ class BookOffer extends Model
         'book_status',
         //'kep_url',
     ];
+
+    public function work()
+    {
+        return $this->belongsTo(Work::class, 'work');
+    }
 }
