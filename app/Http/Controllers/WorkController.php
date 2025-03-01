@@ -27,9 +27,10 @@ class WorkController extends Controller
     /* mű táblában van-e az adott szerző és adott könyv feltöltve. ha igen, akkor LEKÉRED A MU_ID
     h NINCS, AKKOR  létrehozol egy új mu -t új id-val. utána kéred le az mu_id
     cim alapján*/
+
         //$genre = Genre::find($request->genre_id);
        
-    $work = Work::firstOrCreate([ //--létezik e már
+    $work = Work::firstOrCreate([ //--létezik e már, vagy csinál
         //$work = Work::create([
             'genre_id' => $request->genre_id,
             'title' => $request->title, 
@@ -42,6 +43,8 @@ class WorkController extends Controller
             'book' => $work
         ], 201);*/
 
+
+        
         // 2. könyvfeltöltés
         $request->validate([
             'user' => 'required|exists:users,id',

@@ -73,4 +73,24 @@ class UserController extends Controller
         return response()->json($inactiveUsers);
     }
 
+
+    public function givenUsersExchanges($user_id)
+    {
+        $exchanges = DB::table('exchange_histories')
+            ->where('interested_user', $user_id)
+            ->orWhereIn('desired_item', function ($query) use ($user_id) {
+                $query->select('offer_id')
+                      ->from('book_offers')
+                      ->where('user', $user_id);
+            })
+            ->orWhereIn('offered_item', function ($query) use ($user_id) {
+                $query->select('offer_id')
+                      ->from('book_offers')
+                      ->where('user', $user_id);
+            })
+            ->get();
+
+        return response()->json($exchanges);
+    }
+
 }

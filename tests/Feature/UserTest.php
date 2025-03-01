@@ -63,6 +63,18 @@ class UserTest extends TestCase
     }
 
     
-    
+    public function test_users_exchanges(): void
+    {
+        $response = $this->get('/api/exchanges/3');
+
+        $response->assertStatus(200); 
+    }
+
+    public function test_users_books_exchanges(): void
+    {
+        $response = $this->get('/api/exchanges/3/4');
+
+        $response->assertStatus(200); 
+    }
 
 }

@@ -43,7 +43,7 @@ class BooksTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /*public function test_most_exchanged_genre(): void
+    public function test_most_exchanged_genre(): void
     {
         $response = $this->get('/api/most-exchanged-genre');
 
@@ -55,7 +55,7 @@ class BooksTest extends TestCase
         $response = $this->get('/api/most-exchanged-city');
 
         $response->assertStatus(200);
-    }*/
+    }
 
     public function test_book_quality_list(): void
     {
@@ -72,4 +72,6 @@ class BooksTest extends TestCase
         $response->assertStatus(200);
 
     }
+
+    
 }
