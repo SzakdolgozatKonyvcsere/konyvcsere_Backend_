@@ -47,19 +47,20 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_inactive_users(): void
+    {
+        $response = $this->get('/api/inactive-users');
+
+        $response->assertStatus(200); 
+    }
+
+    // LEAVE THIS AT THE BOTTOM
     public function test_re_migrate(): void
     {
         Artisan::call('migrate:fresh --seed');
 
         $response = $this->get('/api/users');
         $response->assertStatus(200);
-    }
-
-    public function test_inactive_users(): void
-    {
-        $response = $this->get('/api/inactive-users');
-
-        $response->assertStatus(200); 
     }
 
     

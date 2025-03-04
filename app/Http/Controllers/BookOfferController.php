@@ -80,7 +80,7 @@ if (!$work) {
             ->where('book_offers.user', '=', $id) 
             ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status') 
             ->get();
-        //Log::info('User ID:', [$id]);
+
         return response()->json($books); 
     }
 
@@ -152,5 +152,7 @@ public function badQualityBooks()
 
     return response()->json($books);
 }
+
+
 
 }

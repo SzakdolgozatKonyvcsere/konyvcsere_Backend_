@@ -14,7 +14,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(database_path('migrations/views'));
         $this->loadMigrationsFrom(database_path('migrations/triggers'));
-        // Added to ensure views migrations
+        $this->loadMigrationsFrom(database_path('migrations/procedures'));
+        // Added to ensure additional migrations
     }
 
     /**

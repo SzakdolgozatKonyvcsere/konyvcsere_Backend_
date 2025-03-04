@@ -24,8 +24,8 @@ class BookDemandFactory extends Factory
             'publisher' => Publisher::all()->random()->publisher_id,
             'work' => Work::all()->random()->work_id,
             'language' => fake()->languageCode(),
-            'min_publication_year' => fake()->year(),
-            'max_publication_year' => fake()->year(),
+            'min_publication_year' => $minPubYear = rand(1850, 2019),
+            'max_publication_year' => ($minPubYear + rand(1, 5)),
             'demand_status' => rand(0,2)
         ];
     }
