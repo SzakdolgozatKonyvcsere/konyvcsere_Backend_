@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+ 
     public function up(): void
     {
         DB::statement('DROP VIEW IF EXISTS view_book_offers_by_user');
@@ -22,9 +20,6 @@ return new class extends Migration
         ");
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         DB::statement('DROP VIEW IF EXISTS view_book_offers_by_user');

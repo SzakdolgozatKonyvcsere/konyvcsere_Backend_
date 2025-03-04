@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookDemandController;
 use App\Http\Controllers\BookOfferController;
+use App\Http\Controllers\ExchangeHistoryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkController;
@@ -17,14 +18,12 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    //konyvfeltolteshez:
+    //KONYVFELTOLTES:
     //Route::post('/booksupload', [BookOfferController::class, 'store']);
-    Route::post('/mufeltoltes', [WorkController::class, 'store']);
-    //Route::post('/konyvfeltoltes', [BookOfferController::class, 'store']);
+    //Route::post('/mufeltoltes', [WorkController::class, 'store']);
+    Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
     Route::get('/genres', [GenreController::class, 'index']);
     
-
-//Route::get('/genres', [GenreController::class, 'allGenres']);
 
 });
 
@@ -58,3 +57,6 @@ Route::get('/most-exchanged-genre', [BookOfferController::class, 'mostExchangedG
 Route::get('/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
 Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']);
 Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
+Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
+Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
+

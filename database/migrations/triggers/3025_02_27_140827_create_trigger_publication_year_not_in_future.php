@@ -34,9 +34,6 @@ return new class extends Migration
         ");
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         DB::statement("DROP TRIGGER IF EXISTS publication_year_not_in_future_insert");
