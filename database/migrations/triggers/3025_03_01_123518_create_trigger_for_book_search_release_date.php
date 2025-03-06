@@ -12,6 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Ez egy constraint lenne alapból
         DB::statement("
             CREATE TRIGGER check_book_search_release_date_insert
             BEFORE INSERT ON book_demands

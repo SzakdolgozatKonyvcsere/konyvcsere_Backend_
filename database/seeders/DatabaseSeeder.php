@@ -23,75 +23,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        /*User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);*/
-        User::factory()->create([
-            'name' => 'admin_michael',
-            'email' => 'michael@admin.com',
-            'password' => 'michael12345',
-            'full_name' => 'Sir Michael Adminsson',
-            'tel' => fake()->phoneNumber(),
-            'remember_token' => Str::random(30),
-            'role' => 0,
-            'online_status' => 0,
-            'img_url' => "https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid"
+        $this->call([
+            UsersTableSeeder::class,
+            GenresTableSeeder::class,
+            Exchange_HistoriesTableSeeder::class,
+            PublishersTableSeeder::class,
+            WorksTableSeeder::class,
+            AuthorsTableSeeder::class,
+            Book_OffersTableSeeder::class,
+            Book_DemandsTableSeeder::class,
+            DictionariesTableSeeder::class,
+            Written_BiesTableSeeder::class,
         ]);
 
-        User::factory()->create([
-            'name' => 'test_sophia',
-            'email' => 'sophia@test.com',
-            'password' => 'sophia12345',
-            'full_name' => 'Sophia Tucker',
-            'tel' => fake()->phoneNumber(),
-            'remember_token' => Str::random(30),
-            'role' => 1,
-            'online_status' => 0,
-            'img_url' => "https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid"
-        ]);
         
-        User::factory()->create([
-            'name' => 'test_andrew',
-            'email' => 'andrew@test.com',
-            'password' => 'andrew12345',
-            'full_name' => 'Andrew Smith',
-            'tel' => fake()->phoneNumber(),
-            'remember_token' => Str::random(30),
-            'role' => 1,
-            'online_status' => 0,
-            'img_url' => "https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid"
-        ]);
-
-        $genres = [
-            'Regény',
-            'Sci-fi',
-            'Történelmi',
-            'Krimi',
-            'Fantasy',
-            'Dráma',
-            'Gyermekirodalom',
-            'Vers',
-            'Életrajz',
-            'Tudományos'
-        ];
-
-        foreach ($genres as $genreName) {
-            Genre::factory()->create([
-                'genre_name' => $genreName,
-            ]);
-        }
-
-
-        Publisher::factory(10)->create();
         Author::factory(10)->create();
         Work::factory(10)->create();
         WrittenBy::factory(5)->create();
         BookDemand::factory(10)->create();
         BookOffer::factory(10)->create();
         ExchangeHistory::factory(6)->create();
-        Dictionary::factory(10)->create();
+        
     }
 }

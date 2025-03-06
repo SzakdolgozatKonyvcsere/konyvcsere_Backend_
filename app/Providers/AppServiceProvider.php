@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(database_path('migrations/views'));
         $this->loadMigrationsFrom(database_path('migrations/triggers'));
         $this->loadMigrationsFrom(database_path('migrations/procedures'));
+        $this->loadMigrationsFrom(database_path('migrations/constraints'));
         // Added to ensure additional migrations
     }
 
