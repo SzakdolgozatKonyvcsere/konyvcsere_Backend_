@@ -11,7 +11,7 @@ class Work extends Model
     use HasFactory;
 
     protected $fillable = [
-        'genre',
+        'genre_id',
         'title'
     ];
 }

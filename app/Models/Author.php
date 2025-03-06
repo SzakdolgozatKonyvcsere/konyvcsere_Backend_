@@ -11,7 +11,7 @@ class Author extends Model
     /** @use HasFactory<\Database\Factories\AuthorFactory> */
     use HasFactory;
 
-    protected $fillable = ['szerzo_nev'];
+    protected $fillable = ['author_name'];
 
     public function writtenbies()
     {

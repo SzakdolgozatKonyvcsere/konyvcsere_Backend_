@@ -13,7 +13,7 @@ class WrittenBy extends Model
     public $incrementing = false;
     protected $primaryKey = null;
     protected $fillable = [
-        'mu',
-        'szerzo'
+        'work',
+        'author'
     ];
 }
