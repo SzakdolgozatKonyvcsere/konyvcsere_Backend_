@@ -36,10 +36,6 @@ class DatabaseSeeder extends Seeder
             Written_BiesTableSeeder::class,
         ]);
 
-        
-        Author::factory(10)->create();
-        Work::factory(10)->create();
-        WrittenBy::factory(5)->create();
         BookDemand::factory(10)->create();
         BookOffer::factory(10)->create();
         ExchangeHistory::factory(6)->create();

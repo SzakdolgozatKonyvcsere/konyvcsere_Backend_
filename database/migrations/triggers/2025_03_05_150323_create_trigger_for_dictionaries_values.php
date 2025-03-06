@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         DB::statement("
-            create trigger check_demand_status_values before insert on book_demands
+            create trigger check_demand_status_values_insert before insert on book_demands
             for each row
             begin
                 if not exists (select 1 from dictionaries where type = 'demand_status' and value = new.demand_status) then
@@ -23,7 +23,7 @@ return new class extends Migration
         "); 
 
         DB::statement("
-            create trigger check_book_status_values before insert on book_offers
+            create trigger check_book_status_values_insert before insert on book_offers
             for each row
             begin
                 if not exists (select 1 from dictionaries where type = 'book_status' and value = new.book_status) then
@@ -33,7 +33,37 @@ return new class extends Migration
         ");
 
         DB::statement("
-            create trigger check_exchange_status_values before insert on exchange_histories
+            create trigger check_exchange_status_values_insert before insert on exchange_histories
+            for each row
+            begin
+                if not exists (select 1 from dictionaries where type = 'exchange_status' and value = new.exchange_status) then
+                    signal sqlstate '45000' set message_text = 'invalid exchange_status value';
+                end if;
+            end
+        ");
+
+        DB::statement("
+            create trigger check_demand_status_values_update before update on book_demands
+            for each row
+            begin
+                if not exists (select 1 from dictionaries where type = 'demand_status' and value = new.demand_status) then
+                    signal sqlstate '45000' set message_text = 'invalid demand_status value';
+                end if;
+            end
+        "); 
+
+        DB::statement("
+            create trigger check_book_status_values_update before update on book_offers
+            for each row
+            begin
+                if not exists (select 1 from dictionaries where type = 'book_status' and value = new.book_status) then
+                    signal sqlstate '45000' set message_text = 'invalid book_status value';
+                end if;
+            end
+        ");
+
+        DB::statement("
+            create trigger check_exchange_status_values_update before update on exchange_histories
             for each row
             begin
                 if not exists (select 1 from dictionaries where type = 'exchange_status' and value = new.exchange_status) then

@@ -12,6 +12,6 @@ class AuthorsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $authors = ["Harper Lee", "Asd"];
     }
 }
