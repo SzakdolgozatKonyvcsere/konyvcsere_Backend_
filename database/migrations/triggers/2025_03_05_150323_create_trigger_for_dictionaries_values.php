@@ -22,15 +22,15 @@ return new class extends Migration
             end
         "); 
 
-       /*  DB::statement("
-            create trigger check_book_status_values before insert on book_offers
+        DB::statement("
+            create trigger check_book_status_values_insert before insert on book_offers
             for each row
             begin
                 if not exists (select 1 from dictionaries where type = 'book_status' and value = new.book_status) then
                     signal sqlstate '45000' set message_text = 'invalid book_status value';
                 end if;
             end
-        "); */
+        ");
 
         DB::statement("
             create trigger check_exchange_status_values_insert before insert on exchange_histories
