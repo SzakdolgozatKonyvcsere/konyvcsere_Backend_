@@ -106,9 +106,19 @@ class WorkController extends Controller
             'publication_year' => 'required|integer',
             'quality' => 'required|integer',
             //'book_status' => 'nullable|integer',
-            //'img_url' => 'nullable|string',
+            'img_url' => ['nullable|mimes:jpg,png,gif,jpeg,svg|max:2048'],
             
         ]);
+
+        // Fájlkezelés, ha van feltöltött kép
+        $imagePath = null;
+        if ($request->hasFile('img_url')) {
+            $file = $request->file('img_url');
+            $extension = $file->getClientOriginalExtension();
+            $imageName = time() . '.' . $extension;
+            $file->move(public_path('uploads/books'), $imageName);
+            $imagePath = url('uploads/books/' . $imageName);
+        }
 
         //$work = Work::where('work', $request->work)->first();
         
@@ -121,7 +131,7 @@ class WorkController extends Controller
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
             'book_status' => 1, // Ha nincs megadva, akkor legyen 1,
-            //'img_url' => 'nullable|string',
+            'img_url' => $imagePath,
           
             //'id' => Auth::id(), // Bejelentkezett felhasználó azonosítója
         ]); 
