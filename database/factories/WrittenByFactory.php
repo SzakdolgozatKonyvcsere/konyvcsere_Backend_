@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Author;
 use App\Models\Publisher;
 use App\Models\Work;
+use App\Models\WrittenBy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,10 +20,14 @@ class WrittenByFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'work' => Work::inRandomOrder()->value('work_id'),
-            'author' => Author::inRandomOrder()->value('author_id')
+        do {
+            $work = Work::inRandomOrder()->value('work_id');
+            $author = Author::inRandomOrder()->value('author_id');
+        } while (WrittenBy::where('work', $work)->where('author', $author)->exists());
         
+        return [
+            'work' => $work,
+            'author' => $author,
         ];
     }
 }

@@ -14,6 +14,7 @@ use App\Models\Work;
 use App\Models\WrittenBy;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -23,7 +24,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
+        /*$this->call([
             UsersTableSeeder::class,
             GenresTableSeeder::class,
             Exchange_HistoriesTableSeeder::class,
@@ -34,10 +35,83 @@ class DatabaseSeeder extends Seeder
             Book_DemandsTableSeeder::class,
             DictionariesTableSeeder::class,
             Written_BiesTableSeeder::class,
+        ]);*/
+
+        User::factory()->create([
+            'name' => 'admin_michael',
+            'email' => 'michael@admin.com',
+            'password' => Hash::make('michael12345'),
+            'full_name' => 'Sir Michael Adminsson',
+            'tel' => fake()->unique->phoneNumber(),
+            'remember_token' => Str::random(30),
+            'role' => 0,
+            'online_status' => 0,
+            'img_url' => "https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid"
         ]);
 
-        BookDemand::factory(10)->create();
+        User::factory()->create([
+            'name' => 'test_sophia',
+            'email' => 'sophia@test.com',
+            'password' => Hash::make('sophia12345'),
+            'full_name' => 'Sophia Tucker',
+            'tel' => fake()->unique->phoneNumber(),
+            'remember_token' => Str::random(30),
+            'role' => 1,
+            'online_status' => 0,
+            'img_url' => "https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid"
+        ]);
+        
+        User::factory()->create([
+            'name' => 'test_andrew',
+            'email' => 'andrew@test.com',
+            'password' => Hash::make('andrew12345'),
+            'full_name' => 'Andrew Smith',
+            'tel' => fake()->unique->phoneNumber(),
+            'remember_token' => Str::random(30),
+            'role' => 1,
+            'online_status' => 0,
+            'img_url' => "https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid"
+        ]);
+        
+
+        $genres = [
+            'Regény','Sci-Fi','Fantasy','Dráma','Horror','Romantikus','Kaland','Krimi',
+            'Thriller','Történelmi','Életrajzi','Szatíra','Humor','Disztópia',
+            'Posztapokaliptikus','Gasztronómiai','Pszichológiai','Háborús','Politikai',
+            'Filozófiai','Esszé','Napló','Verseskötet','Ifjúsági','Gyermekkönyv',
+            'Képregény','Manga','Vallási','Önsegítő','Ismeretterjesztő','Tudományos',
+            'Oktatási','Dokumentumregény', 'Egyéb'
+        ];
+
+        foreach ($genres as $genreName) {
+            Genre::factory()->create([
+                'genre_name' => $genreName,
+            ]);
+        }
+
+
+        $statuses = [
+            'demand_status' => ['e', 'k', 't'],
+            'book_status' => ['e', 'f', 's'],
+            'exchange_status' => ['a', 'k', 'f', 'v']
+        ];
+        
+        foreach ($statuses as $type => $values) {
+            foreach ($values as $value) {
+                Dictionary::factory()->create([
+                    'type'  => $type,
+                    'value' => $value,
+                ]);
+            }
+        }
+
+
+        Publisher::factory(10)->create();
+        Work::factory(10)->create();
+        Author::factory(10)->create();
+        WrittenBy::factory(4)->create();
         BookOffer::factory(10)->create();
+        BookDemand::factory(10)->create();
         ExchangeHistory::factory(6)->create();
         
     }

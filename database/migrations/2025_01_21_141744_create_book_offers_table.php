@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('language');
             $table->integer('publication_year');
             $table->integer('quality');
-            $table->integer('book_status')->default(1);
+            $table->char('book_status')->default('s');
             //$table->string('img_url');
             $table->timestamps();
         });

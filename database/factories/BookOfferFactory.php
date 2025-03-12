@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Dictionary;
 use App\Models\Publisher;
 use App\Models\User;
 use App\Models\Work;
@@ -26,7 +27,7 @@ class BookOfferFactory extends Factory
             'language' => fake()->word(), // Véletlenszerű nyelvkód (pl. 'en', 'hu')
             'publication_year' => fake()->year(), // Véletlenszerű kiadási év
             'quality' => rand(0,5),
-            'book_status' => rand(0,3) // Állapot
+            'book_status' => Dictionary::where('type', 'book_status')->inRandomOrder()->first()->value, // Állapot
 
             //'img_url' => $this->faker->imageUrl(640, 480, 'books', true, 'Könyv kép'), // Véletlenszerű könyvkép URL*/
 

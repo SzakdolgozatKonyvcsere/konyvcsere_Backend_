@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('language')->nullable();
             $table->integer('min_publication_year')->nullable();
             $table->integer('max_publication_year')->nullable();
-            $table->integer('demand_status')->nullable();
+            $table->char('demand_status')->nullable();
             $table->timestamps();
         });
     }

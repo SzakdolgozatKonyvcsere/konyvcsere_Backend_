@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('dictionaries', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->unique();
-            $table->string('value')->unique();
+            $table->string('type');
+            $table->string('value');
             $table->timestamps();
         });
     }

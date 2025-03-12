@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Dictionary;
 use App\Models\Publisher;
 use App\Models\User;
 use App\Models\Work;
@@ -26,7 +27,7 @@ class BookDemandFactory extends Factory
             'language' => fake()->languageCode(),
             'min_publication_year' => $minPubYear = rand(1850, 2019),
             'max_publication_year' => ($minPubYear + rand(1, 5)),
-            'demand_status' => rand(0,2)
+            'demand_status' => Dictionary::where('type', 'demand_status')->inRandomOrder()->first()->value,
         ];
     }
 }

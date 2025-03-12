@@ -65,7 +65,7 @@ class WorkController extends Controller
         ]);
         $author = Author::where('author_name', $request->author)->first();
         
-        if (!$author) {
+        //if (!$author) {
             
             $author = Author::firstOrCreate([ //--létezik e már, vagy csinál
            
@@ -74,7 +74,7 @@ class WorkController extends Controller
                 
             ]);
         
-        }
+        //}
 
         $writtenby = WrittenBy::where('author', $author->author_id)
                       ->where('work', $work->work_id)
@@ -130,7 +130,7 @@ class WorkController extends Controller
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
-            'book_status' => 1, // Ha nincs megadva, akkor legyen 1,
+            'book_status' => 's', // Ha nincs megadva, akkor legyen s (szabad),
             'img_url' => $imagePath,
           
             //'id' => Auth::id(), // Bejelentkezett felhasználó azonosítója
