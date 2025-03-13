@@ -33,4 +33,18 @@ class BookDemandController extends Controller
 
            return $deleted;
        }
+
+       public function getUserBookDemandInfo($user_id){
+        $book_info = DB::select("
+            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, min_publication_year, max_publication_year, demand_status
+            FROM book_demands bd
+                INNER JOIN users u on u.id = bd.user
+                INNER JOIN publishers p on p.publisher_id = bd.publisher
+                INNER JOIN works w on w.work_id = bd.work
+                INNER JOIN genres g on g.genre_id = w.genre_id
+            WHERE bd.user = $user_id
+        ");
+            
+        return response()->json($book_info);
+    }
 }

@@ -74,24 +74,38 @@ class BookOfferController extends Controller
     }
 
 
-public function bookQualityList()
-{
-    $books = BookOffer::select('offer_id', 'user', 'publisher', 'work', 'language', 
-    'publication_year', 'quality', 'book_status')
-        ->where('quality', '>=', 4);
+    public function bookQualityList()
+    {
+        $books = BookOffer::select('offer_id', 'user', 'publisher', 'work', 'language', 
+        'publication_year', 'quality', 'book_status')
+            ->where('quality', '>=', 4);
 
-    return response()->json($books);
-}
+        return response()->json($books);
+    }
 
-public function badQualityBooks()
-{
-    $books = BookOffer::select('offer_id', 'user', 'publisher', 'work', 'language', 
-    'publication_year', 'quality', 'book_status')
-    ->where('quality', '<', 4);
+    public function badQualityBooks()
+    {
+        $books = BookOffer::select('offer_id', 'user', 'publisher', 'work', 'language', 
+        'publication_year', 'quality', 'book_status')
+        ->where('quality', '<', 4);
 
-    return response()->json($books);
-}
+        return response()->json($books);
+    }
 
+    public function getUserBookOfferInfo($user_id){
+        $book_info = DB::select("
+            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status
+            FROM book_offers bo
+                INNER JOIN users u on u.id = bo.user
+                INNER JOIN publishers p on p.publisher_id = bo.publisher
+                INNER JOIN works w on w.work_id = bo.work
+                INNER JOIN genres g on g.genre_id = w.genre_id
+            WHERE bo.user = $user_id
+        ");
+            
+        return response()->json($book_info);
+    }
 
+    
 
 }
