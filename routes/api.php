@@ -59,4 +59,5 @@ Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']
 Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
 Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
 Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
+Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
 
