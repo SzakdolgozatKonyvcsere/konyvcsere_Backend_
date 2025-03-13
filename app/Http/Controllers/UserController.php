@@ -16,8 +16,6 @@ class UserController extends Controller
     function show($id){
         return User::find($id);
     } 
-
-
     
     public function authorAllWorks($author)
     {
@@ -91,6 +89,16 @@ class UserController extends Controller
             ->get();
 
         return response()->json($exchanges);
+    }
+
+    public function getUserProfileInfo($user_id){
+        $user_info = DB::select("
+            SELECT name, email, full_name, city, tel, role, online_status, img_url
+            FROM users u
+            WHERE u.id = $user_id
+        ");
+
+        return response()->json($user_info);
     }
 
 }
