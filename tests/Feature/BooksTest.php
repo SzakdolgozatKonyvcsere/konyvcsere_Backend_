@@ -72,6 +72,13 @@ class BooksTest extends TestCase
         $response->assertStatus(200);
 
     }
+    
+    public function test_all_available_books(): void
+    {
+        $response = $this ->get('/api/all-available-books');
 
+        $response->assertStatus(200);
+
+    }
     
 }

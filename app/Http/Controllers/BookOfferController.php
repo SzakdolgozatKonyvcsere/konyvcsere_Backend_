@@ -92,6 +92,19 @@ class BookOfferController extends Controller
         return response()->json($books);
     }
 
+public function getAllBookOffersAvailable() {
+    $books = DB::table('book_offers')
+        ->join('works', 'book_offers.work', '=', 'works.work_id') 
+        ->join('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
+        ->join('written_bies', 'works.work_id', '=', 'written_bies.work')
+        ->join('authors', 'written_bies.author', '=', 'authors.author_id')
+        ->where('book_offers.book_status', '=', 's') 
+        ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status', 'authors.author_name', 'book_offers.publication_year') 
+        ->get();
+
+    return response()->json($books); 
+}
+
     public function getUserBookOfferInfo($user_id){
         $book_info = DB::select("
             SELECT u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status
