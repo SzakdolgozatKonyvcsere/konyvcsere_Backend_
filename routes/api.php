@@ -23,7 +23,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Route::post('/mufeltoltes', [WorkController::class, 'store']);
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
     Route::get('/genres', [GenreController::class, 'index']);
-    
 
 });
 
@@ -62,4 +61,5 @@ Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 
 Route::get('/user-profile-info/{user_id}', [UserController::class, "getUserProfileInfo"]);
 Route::get('/user-book-offer-info/{user_id}', [BookOfferController::class, "getUserBookOfferInfo"]);
 Route::get('/user-book-demand-info/{user_id}', [BookDemandController::class, "getUserBookDemandInfo"]);
+Route::patch('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
 

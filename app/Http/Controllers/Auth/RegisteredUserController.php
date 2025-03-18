@@ -29,17 +29,13 @@ class RegisteredUserController extends Controller
             'tel' => ['nullable', 'string', 'max:20'],
             //'remember_token' => ['string', 'max:50'],
             'role' => ['integer'],
-            'img_url' =>  ['nullable|mimes:jpg,png,gif,jpeg,svg|max:2048'],
+            'img_url' =>  ['nullable', 'image', 'mimes:jpg,png,gif,jpeg,svg', 'max:2048'],
         ]);
 
         // Fájlkezelés, ha van feltöltött kép
         $imagePath = null;
-        if ($request->hasFile('img_url')) {
-            $file = $request->file('img_url');
-            $extension = $file->getClientOriginalExtension();
-            $imageName = time() . '.' . $extension;
-            $file->move(public_path('uploads/users'), $imageName);
-            $imagePath = url('uploads/users/' . $imageName);
+        if ($request->hasFile('img_url') && $request->file('img_url')->getSize() > 0) {
+            $imagePath = $request->file('img_url')->store('profile_pictures', 'public');
         }
 
         $user = User::create([
@@ -51,7 +47,7 @@ class RegisteredUserController extends Controller
             'tel' => $request->tel,
             //'remember_token' => $request->remember_token,
             'role' => 1,
-            'img_url' => $imagePath,
+            //'img_url' => $imagePath,
         ]);
 
         event(new Registered($user));

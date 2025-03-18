@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('tel');
             $table->smallInteger('role')->default(1); // 0 - Admin | 1 - User | ...
             $table->smallInteger('online_status')->default(0); // 0 - Offline | 1 - Online | 2 - Inactive
-            $table->string('img_url', 2048)->default('https://img.freepik.com/premium-vector/user-icons-includes-user-icons-people-icons-symbols-premiumquality-graphic-design-elements_981536-526.jpg?semt=ais_hybrid');
+            $table->string('img_url', 5000)->default('https://i.pinimg.com/1200x/2c/47/d5/2c47d5dd5b532f83bb55c4cd6f5bd1ef.jpg');
             $table->rememberToken();
             $table->timestamps();
         });

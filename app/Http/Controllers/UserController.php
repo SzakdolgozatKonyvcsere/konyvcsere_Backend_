@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -99,6 +101,36 @@ class UserController extends Controller
         ");
 
         return response()->json($user_info);
+    }
+
+    public function updateProfilePicture(Request $request) {
+        $request->validate([
+            'img_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:5000',
+        ]);
+    
+        $user = Auth::user();
+    
+        //Ha volt régi kép, töröljük
+        if ($user->img_url && !str_contains($user->img_url, 'default-image.jpg')) {
+            $oldImagePath = public_path($user->img_url);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+    
+        //Feltöltött kép kezelése
+        if ($request->hasFile('img_url')) {
+            $file = $request->file('img_url');
+            $imageName = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('profile_pictures'), $imageName);
+            $imagePath = 'profile_pictures/' . $imageName;
+    
+            $user->update(['img_url' => $imagePath]);
+            
+            return response()->json(['message' => 'Profile picture updated!', 'img_url' => $imagePath]);
+        }
+    
+        return response()->json(['message' => 'No image uploaded'], 400);
     }
 
 }
