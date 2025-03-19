@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -104,6 +105,8 @@ class UserController extends Controller
     }
 
     public function updateProfilePicture(Request $request) {
+        Log::info($request->all()); // Logs all received data
+        Log::info($request->file('img_url'));
         $request->validate([
             'img_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:5000',
         ]);
@@ -111,13 +114,14 @@ class UserController extends Controller
         $user = Auth::user();
     
         //Ha volt régi kép, töröljük
-        if ($user->img_url && !str_contains($user->img_url, 'default-image.jpg')) {
+        if ($user->img_url && !str_contains($user->img_url, 'https://i.pinimg.com/1200x/2c/47/d5/2c47d5dd5b532f83bb55c4cd6f5bd1ef.jpg')) {
+            // Ezt a default értéket pls ignore, majd beköltözik egyszer a public-ba 
             $oldImagePath = public_path($user->img_url);
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
             }
         }
-    
+        
         //Feltöltött kép kezelése
         if ($request->hasFile('img_url')) {
             $file = $request->file('img_url');
@@ -125,7 +129,7 @@ class UserController extends Controller
             $file->move(public_path('profile_pictures'), $imageName);
             $imagePath = 'profile_pictures/' . $imageName;
     
-            $user->update(['img_url' => $imagePath]);
+            DB::table('users')->where('id', $user->id)->update(['img_url' => $imagePath]);
             
             return response()->json(['message' => 'Profile picture updated!', 'img_url' => $imagePath]);
         }

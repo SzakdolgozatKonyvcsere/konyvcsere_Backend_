@@ -62,5 +62,5 @@ Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffer
 Route::get('/user-profile-info/{user_id}', [UserController::class, "getUserProfileInfo"]);
 Route::get('/user-book-offer-info/{user_id}', [BookOfferController::class, "getUserBookOfferInfo"]);
 Route::get('/user-book-demand-info/{user_id}', [BookDemandController::class, "getUserBookDemandInfo"]);
-Route::patch('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
+Route::post('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
 
