@@ -99,7 +99,7 @@ public function getAllBookOffersAvailable() {
         ->join('written_bies', 'works.work_id', '=', 'written_bies.work')
         ->join('authors', 'written_bies.author', '=', 'authors.author_id')
         ->where('book_offers.book_status', '=', 's') 
-        ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status', 'authors.author_name', 'book_offers.publication_year') 
+        ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status', 'authors.author_name', 'book_offers.publication_year', 'book_offers.language', 'book_offers.quality') 
         ->get();
 
     return response()->json($books); 
