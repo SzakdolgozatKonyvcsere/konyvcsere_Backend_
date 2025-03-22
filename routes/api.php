@@ -23,6 +23,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Route::post('/mufeltoltes', [WorkController::class, 'store']);
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
     Route::get('/genres', [GenreController::class, 'index']);
+    
+    Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']);  
 
 });
 
