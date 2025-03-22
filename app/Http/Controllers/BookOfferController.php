@@ -107,7 +107,7 @@ public function getAllBookOffersAvailable() {
 
     public function getUserBookOfferInfo($user_id){
         $book_info = DB::select("
-            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status
+            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status, bo.created_at, bo.updated_at
             FROM book_offers bo
                 INNER JOIN users u on u.id = bo.user
                 INNER JOIN publishers p on p.publisher_id = bo.publisher
