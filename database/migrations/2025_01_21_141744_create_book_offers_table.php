@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('publication_year');
             $table->integer('quality');
             $table->char('book_status')->default('s');
-            //$table->string('img_url');
+            $table->string('img_url')->nullable();
             $table->timestamps();
         });
     }

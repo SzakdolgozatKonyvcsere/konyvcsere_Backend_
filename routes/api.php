@@ -21,10 +21,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //KONYVFELTOLTES:
     //Route::post('/booksupload', [BookOfferController::class, 'store']);
     //Route::post('/mufeltoltes', [WorkController::class, 'store']);
-    Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
+   
     Route::get('/genres', [GenreController::class, 'index']);
 
 });
+
+Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
 
