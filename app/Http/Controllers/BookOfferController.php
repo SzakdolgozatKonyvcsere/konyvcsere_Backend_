@@ -99,7 +99,7 @@ public function getAllBookOffersAvailable() {
         ->join('written_bies', 'works.work_id', '=', 'written_bies.work')
         ->join('authors', 'written_bies.author', '=', 'authors.author_id')
         ->where('book_offers.book_status', '=', 's') 
-        ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status', 'authors.author_name', 'book_offers.publication_year') 
+        ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status', 'authors.author_name', 'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user') 
         ->get();
 
     return response()->json($books); 
@@ -107,7 +107,7 @@ public function getAllBookOffersAvailable() {
 
     public function getUserBookOfferInfo($user_id){
         $book_info = DB::select("
-            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status
+            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status, bo.created_at, bo.updated_at
             FROM book_offers bo
                 INNER JOIN users u on u.id = bo.user
                 INNER JOIN publishers p on p.publisher_id = bo.publisher

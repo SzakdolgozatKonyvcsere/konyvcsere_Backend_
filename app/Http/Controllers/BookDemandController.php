@@ -36,7 +36,7 @@ class BookDemandController extends Controller
 
        public function getUserBookDemandInfo($user_id){
         $book_info = DB::select("
-            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, min_publication_year, max_publication_year, demand_status
+            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, min_publication_year, max_publication_year, demand_status, bd.created_at, bd.updated_at
             FROM book_demands bd
                 INNER JOIN users u on u.id = bd.user
                 INNER JOIN publishers p on p.publisher_id = bd.publisher

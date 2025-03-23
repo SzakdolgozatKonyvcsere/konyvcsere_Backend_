@@ -23,6 +23,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Route::post('/mufeltoltes', [WorkController::class, 'store']);
    
     Route::get('/genres', [GenreController::class, 'index']);
+    
+    Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']);  
 
 });
 
@@ -61,8 +63,8 @@ Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']
 Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
 Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
 Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
-Route::get('/user-profile-info/{user_id}', [UserController::class, "getUserProfileInfo"]);
-Route::get('/user-book-offer-info/{user_id}', [BookOfferController::class, "getUserBookOfferInfo"]);
-Route::get('/user-book-demand-info/{user_id}', [BookDemandController::class, "getUserBookDemandInfo"]);
+Route::get('/user/{user_id}/profile-info', [UserController::class, "getUserProfileInfo"]);
+Route::get('/user/{user_id}/book-offer-info', [BookOfferController::class, "getUserBookOfferInfo"]);
+Route::get('/user/{user_id}/book-demand-info', [BookDemandController::class, "getUserBookDemandInfo"]);
 Route::post('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
 
