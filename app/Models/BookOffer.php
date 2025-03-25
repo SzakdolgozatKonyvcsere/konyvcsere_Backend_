@@ -19,7 +19,7 @@ class BookOffer extends Model
         'publication_year',
         'quality',
         'book_status',
-        //'kep_url',
+        'img_url',
     ];
 
     public function work()

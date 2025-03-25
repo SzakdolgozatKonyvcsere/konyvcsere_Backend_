@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use App\Models\BookOffer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,9 +105,33 @@ class UserController extends Controller
         return response()->json($user_info);
     }
 
+    public function updateBookPicture(Request $request, $offer_id){
+        $request->validate([
+            'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:2048']
+        ]);
+    
+        $book = BookOffer::find($offer_id);
+        if(!$book){
+            return response()->json(['error' => 'Book not found!'], 404);
+        }
+    
+        if ($request->hasFile('img_url')) {
+            $file = $request->file('img_url');
+            $imageName = time() . '.' . $file->getClientOriginalExtension(); 
+            $file->move(public_path('uploads/books'), $imageName);
+            $imagePath = 'uploads/books/' . $imageName;  
+    
+            $book->img_url = $imagePath;
+            $book->save();
+            
+            return response()->json(['message' => 'Book image updated!', 'img_url' => asset($book->img_url)]);
+        }
+    
+        return response()->json(['error' => 'No image uploaded!'], 400);
+    }
+
+
     public function updateProfilePicture(Request $request) {
-        Log::info($request->all()); // Logs all received data
-        Log::info($request->file('img_url'));
         $request->validate([
             'img_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:5000',
         ]);

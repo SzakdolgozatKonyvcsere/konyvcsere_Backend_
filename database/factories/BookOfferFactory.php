@@ -29,7 +29,7 @@ class BookOfferFactory extends Factory
             'quality' => rand(0,5),
             'book_status' => Dictionary::where('type', 'book_status')->inRandomOrder()->first()->value, // Állapot
 
-            //'img_url' => $this->faker->imageUrl(640, 480, 'books', true, 'Könyv kép'), // Véletlenszerű könyvkép URL*/
+            'img_url' => $this->faker->imageUrl(640, 480, 'books', true, 'Könyv kép'), // Véletlenszerű könyvkép URL*/
 
         ]; 
     }
