@@ -72,6 +72,28 @@ class DatabaseSeeder extends Seeder
             'online_status' => 0,
             'img_url' => "https://i.pinimg.com/1200x/2c/47/d5/2c47d5dd5b532f83bb55c4cd6f5bd1ef.jpg"
         ]);
+        User::factory()->create([
+            'name' => 'test_theodore',
+            'email' => 'theodore@test.com',
+            'password' => Hash::make('theodore12345'),
+            'full_name' => 'Theodore Milford',
+            'tel' => fake()->unique->phoneNumber(),
+            'remember_token' => Str::random(30),
+            'role' => 1,
+            'online_status' => 0,
+            'img_url' => "https://i.pinimg.com/1200x/2c/47/d5/2c47d5dd5b532f83bb55c4cd6f5bd1ef.jpg"
+        ]);
+        User::factory()->create([
+            'name' => 'test_marika',
+            'email' => 'marika@test.com',
+            'password' => Hash::make('marika12345'),
+            'full_name' => 'Marika Kovács',
+            'tel' => fake()->unique->phoneNumber(),
+            'remember_token' => Str::random(30),
+            'role' => 1,
+            'online_status' => 0,
+            'img_url' => "https://i.pinimg.com/1200x/2c/47/d5/2c47d5dd5b532f83bb55c4cd6f5bd1ef.jpg"
+        ]);
         
 
         $genres = [
@@ -106,14 +128,23 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-
-        Publisher::factory(10)->create();
-        Work::factory(10)->create();
-        Author::factory(10)->create();
-        WrittenBy::factory(4)->create();
-        BookOffer::factory(10)->create();
-        BookDemand::factory(10)->create();
-        ExchangeHistory::factory(6)->create();
+        //$this->call(UsersTableSeeder::class);
+        $this->call([
+            PublishersTableSeeder::class,
+            WorksTableSeeder::class,
+            AuthorsTableSeeder::class,
+            Written_BiesTableSeeder::class,
+            Book_OffersTableSeeder::class,
+            Book_DemandsTableSeeder::class,
+            Exchange_HistoriesTableSeeder::class
+        ]);
+        //Publisher::factory(10)->create();
+        //Work::factory(10)->create();
+        //Author::factory(10)->create();
+        //WrittenBy::factory(4)->create();
+        //BookOffer::factory(10)->create();
+        //BookDemand::factory(10)->create();
+        //ExchangeHistory::factory(6)->create();
         
     }
 }

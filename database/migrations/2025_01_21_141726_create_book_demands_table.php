@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('book_demands', function (Blueprint $table) {
             $table->id('demand_id');
             $table->foreignId('user')->references('id')->on('users');
-            $table->foreignId('publisher')->references('publisher_id')->on('publishers')->nullable();
-            $table->foreignId('work')->references('work_id')->on('works')->nullable();
+            $table->foreignId('publisher')->nullable()->references('publisher_id')->on('publishers');
+            $table->foreignId('work')->nullable()->references('work_id')->on('works');
             $table->string('language')->nullable();
             $table->integer('min_publication_year')->nullable();
             $table->integer('max_publication_year')->nullable();
