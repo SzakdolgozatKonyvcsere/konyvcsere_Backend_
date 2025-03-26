@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('exchange_id');
             $table->foreignId('interested_user')->references('id')->on('users');
             $table->foreignId('desired_item')->references('offer_id')->on('book_offers');
-            $table->foreignId('offered_item')->references('offer_id')->on('book_offers')->nullable();
+            $table->foreignId('offered_item')->nullable()->references('offer_id')->on('book_offers');
             $table->char('exchange_status');
             $table->timestamps();
         });

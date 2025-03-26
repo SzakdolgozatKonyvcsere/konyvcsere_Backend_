@@ -95,11 +95,14 @@ class BookOfferController extends Controller
 public function getAllBookOffersAvailable() {
     $books = DB::table('book_offers')
         ->join('works', 'book_offers.work', '=', 'works.work_id') 
-        ->join('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
-        ->join('written_bies', 'works.work_id', '=', 'written_bies.work')
-        ->join('authors', 'written_bies.author', '=', 'authors.author_id')
+        ->leftJoin('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
+        ->leftJoin('written_bies', 'works.work_id', '=', 'written_bies.work')
+        ->leftJoin('authors', 'written_bies.author', '=', 'authors.author_id')
         ->where('book_offers.book_status', '=', 's') 
-        ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status', 'authors.author_name', 'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user') 
+        ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+        DB::raw('GROUP_CONCAT(authors.author_name SEPARATOR ", ") as authors'), 
+        'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user') 
+        ->groupBy('works.title', 'publishers.publisher_name', 'book_offers.book_status', 'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user')
         ->get();
 
     return response()->json($books); 
