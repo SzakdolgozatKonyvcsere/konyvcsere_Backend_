@@ -121,6 +121,29 @@ public function getAllBookOffersAvailable() {
             
         return response()->json($book_info);
     }
+    public function newBookOffers()
+    {
+        $books = DB::table('book_offers')
+            ->join('works', 'book_offers.work', '=', 'works.work_id')
+            ->join('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id')
+            ->join('written_bies', 'works.work_id', '=', 'written_bies.work')
+            ->join('authors', 'written_bies.author', '=', 'authors.author_id')
+            ->orderBy('book_offers.created_at', 'desc')  // Rendezés a legújabb felajánlások szerint
+            ->take(5)  // Limitáljuk a legújabb 5 könyvre
+            ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+                     'authors.author_name', 'book_offers.publication_year', 
+                     'book_offers.language', 'book_offers.quality', 'book_offers.user', 
+                     'book_offers.created_at', 'book_offers.updated_at')
+            ->get()
+            ->map(function ($book) {
+                
+                $book->created_at = \Carbon\Carbon::parse($book->created_at)->format('Y-m-d H:i:s');
+                $book->updated_at = \Carbon\Carbon::parse($book->updated_at)->format('Y-m-d H:i:s');
+                return $book;
+            });
+    
+        return response()->json($books);
+    }
 
     
 
