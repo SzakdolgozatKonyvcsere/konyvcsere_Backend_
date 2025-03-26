@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\ExchangeHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +22,7 @@ class ExchangeHistoryController extends Controller
             'exchange_status' => $request->exchange_status
         ]);
 
-        return response()->json(['message' => 'Exchange request sent successfully!'], 201);
+        return response()->json(['message' => 'Exchange request sent successfully!', 'exchange' => $exchange,], 201);
     }
 
     public function givenUserBookExchange($user_id, $book_id)
