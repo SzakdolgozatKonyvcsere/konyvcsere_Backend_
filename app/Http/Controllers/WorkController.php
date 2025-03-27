@@ -39,16 +39,12 @@ class WorkController extends Controller
         $work = Work::firstOrCreate([
             'genre_id' => $request->genre_id,
             'title' => $request->title
-        ], [
-            'created_at' => now(),
-            'updated_at' => now(),
+
         ]);
         // Publisher keresése vagy létrehozzuk
         $publisher = Publisher::firstOrCreate([
             'publisher_name' => $request->publisher
-        ], [
-            'created_at' => now(),
-            'updated_at' => now(),
+       
         ]);
 
         // Felhasználó ellenőrzése
@@ -59,6 +55,10 @@ class WorkController extends Controller
         // Author (szerző) keresése vagy létrehozása
         $author = Author::firstOrCreate(['author_name' => $request->author]);
 
+        return response()->json([
+            'author' => $author,
+              // Visszaadjuk az új képet
+        ]);
         // Work - WrittenBy összekapcsolás (több szerző is lehet)
         WrittenBy::updateOrCreate([
             'author' => $author->author_id,
