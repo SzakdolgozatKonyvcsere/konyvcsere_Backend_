@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
     Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']);  
     Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
+    Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
 
 });
 
@@ -63,7 +64,7 @@ Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']
 Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
 Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
 Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
-Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
+
 
 Route::get('/user/{user_id}/profile-info', [UserController::class, "getUserProfileInfo"]);
 

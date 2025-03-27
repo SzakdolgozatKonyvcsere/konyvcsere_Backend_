@@ -59,6 +59,10 @@ class WorkController extends Controller
         // Author (szerző) keresése vagy létrehozása
         $author = Author::firstOrCreate(['author_name' => $request->author]);
 
+        return response()->json([
+            'author' => $author,
+            //'img_url' => $imagePath,  // Visszaadjuk az új képet
+        ]);
         // Work - WrittenBy összekapcsolás (több szerző is lehet)
         WrittenBy::updateOrCreate([
             'author' => $author->author_id,
