@@ -88,13 +88,10 @@ class WorkController extends Controller
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
-<<<<<<< HEAD
             'book_status' => 's', // Szabad státusz alapértelmezetten
             //'img_url' => $imagePath,
-=======
             'book_status' => 's',
             'img_url' => $imagePath,
->>>>>>> 55de4451490f5e67498590781f62c3f6f426c5a5
         ]);
 
         return response()->json([
