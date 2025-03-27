@@ -25,7 +25,7 @@ class WorkController extends Controller
             'language' => 'required|string|max:255',
             'publication_year' => 'required|integer',
             'quality' => 'required|integer',
-            'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:2048'],
+            'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:5120'],
         ]);
     
 
@@ -74,6 +74,11 @@ class WorkController extends Controller
         } else {
             $imagePath = null;
         }
+        /*if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store('uploads', 'public');
+            $validatedData['image'] = asset("storage/$path"); // Elmentjük az URL-t
+        }*/
 
         // Könyv (BookOffer) adatainak mentése
         $book = BookOffer::create([
@@ -83,13 +88,15 @@ class WorkController extends Controller
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
+            'book_status' => 's', // Szabad státusz alapértelmezetten
+            //'img_url' => $imagePath,
             'book_status' => 's',
             'img_url' => $imagePath,
         ]);
 
         return response()->json([
             'book' => $book,
-            'img_url' => $imagePath,  // Visszaadjuk az új képet
+            //'img_url' => $imagePath,  // Visszaadjuk az új képet
         ]);
     }
 }

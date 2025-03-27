@@ -16,13 +16,31 @@ class ExchangeHistoryController extends Controller
             'exchange_status' => 'required|in:a,k,f,v' 
         ]);
 
+        // Ellenőrizzük, hogy a kívánt könyv státusza "f"-e (nem elérhető)
+        $book = DB::table('book_offers')
+        ->where('offer_id', $request->desired_item)
+        ->first();
+
+        if ($book && $book->book_status === 'f') {
+            return response()->json(['message' => 'This book is no longer available for exchange.'], 400);
+        }
+
         $exchange = ExchangeHistory::create([
             'interested_user' => $request->interested_user,
             'desired_item' => $request->desired_item,
             'exchange_status' => $request->exchange_status
         ]);
+        // Ha az exchange_status "k" (kérés), frissítjük a book_offers táblát
+        if ($request->exchange_status === 'k') {
+            DB::table('book_offers')
+                ->where('offer_id', $request->desired_item)  // A kívánt könyv ID-ja
+                ->update(['book_status' => 'f']);  // Frissítjük a book_status-t "f"-re
+        }
 
-        return response()->json(['message' => 'Exchange request sent successfully!', 'exchange' => $exchange,], 201);
+        return response()->json([
+            'message' => 'Exchange request sent successfully!',
+            'exchange' => $exchange,
+        ], 201);
     }
 
     public function givenUserBookExchange($user_id, $book_id)
