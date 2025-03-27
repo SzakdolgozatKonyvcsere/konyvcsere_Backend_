@@ -27,6 +27,7 @@ class WorkController extends Controller
             'quality' => 'required|integer',
             //'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:2048'],
         ]);
+    
 
         // Genre validálása és keresése
         $genre = Genre::find($request->genre_id);
@@ -49,7 +50,7 @@ class WorkController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        
+
         // Felhasználó ellenőrzése
         $user = User::find($request->user);
         if (!$user) {
@@ -60,8 +61,8 @@ class WorkController extends Controller
 
         // Work - WrittenBy összekapcsolás (több szerző is lehet)
         WrittenBy::updateOrCreate([
-            'author' => $author->author_id,  
-            'work' => $work->work_id        
+            'author' => $author->author_id,
+            'work' => $work->work_id
         ]);
 
         // Fájlkezelés, ha van kép
@@ -82,11 +83,15 @@ class WorkController extends Controller
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
+<<<<<<< HEAD
             'book_status' => 's', // Szabad státusz alapértelmezetten
             //'img_url' => $imagePath,
+=======
+            'book_status' => 's',
+            'img_url' => $imagePath,
+>>>>>>> 55de4451490f5e67498590781f62c3f6f426c5a5
         ]);
 
-        // Válasz visszaadása
         return response()->json([
             'book' => $book,
             //'img_url' => $imagePath,  // Visszaadjuk az új képet
