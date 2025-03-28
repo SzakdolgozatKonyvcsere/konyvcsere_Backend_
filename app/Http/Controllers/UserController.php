@@ -6,6 +6,7 @@ use App\Models\Author;
 use App\Models\BookOffer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,45 @@ class UserController extends Controller
 
     function show($id){
         return User::find($id);
-    } 
+    }
+    
+    public function getGivenUserProfileExchangeInfo($id){
+         // Beállítjuk a Carbon nyelvét magyarra
+        Carbon::setLocale('hu');
+
+        $user = DB::table('users')
+        ->join('exchange_histories', 'users.id', '=', 'exchange_histories.interested_user')
+        ->where('exchange_histories.exchange_status', '=', 'a')
+        ->where('users.id', '=', $id)
+        ->select('users.*', DB::raw('COUNT(exchange_histories.exchange_id) as exchange_count'))
+        ->groupBy('users.id')
+        ->first(); // Csak egyetlen felhasználót lekérni, így az elsőt kérjük
+
+        if ($user) {
+            // A created_at mezőt Carbon objektummá alakítjuk és kiszámoljuk az eltelt időt
+            // -> CARBON a created_at mező formázására
+            // -> diffForH kiszámítja az emberi olvasható formátumot
+            $user->registered_since = Carbon::parse($user->created_at)->diffForHumans();
+        }
+
+        return $user;
+    }
+    public function getGivenUserMostExchangedGenre($userId)
+    {
+        $mufaj = DB::table('exchange_histories as c')
+            ->select('g.genre_name', DB::raw('count(c.exchange_id) as exchange_number'))
+            ->join('book_offers as bk', 'c.desired_item', '=', 'bk.offer_id')
+            ->join('works as w', 'bk.work', '=', 'w.work_id')
+            ->join('genres as g', 'w.genre_id', '=', 'g.genre_id')
+            ->where('c.exchange_status', 'a') 
+            ->where('c.interested_user', $userId) 
+            ->groupBy('g.genre_name')
+            ->orderByDesc(DB::raw('count(c.exchange_id)'))
+            ->limit(1) 
+            ->get();
+
+        return response()->json($mufaj);
+    }
     
     public function authorAllWorks($author)
     {
@@ -104,6 +143,8 @@ class UserController extends Controller
 
         return response()->json($user_info);
     }
+
+    
 
     public function updateBookPicture(Request $request, $offer_id){
         $request->validate([

@@ -18,15 +18,16 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    //KONYVFELTOLTES:
-    //Route::post('/booksupload', [BookOfferController::class, 'store']);
-    //Route::post('/mufeltoltes', [WorkController::class, 'store']);
+    
    
     Route::get('/genres', [GenreController::class, 'index']);
-    Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
+    Route::post('/konyvfeltoltes', [WorkController::class, 'store']); //KONYVFELTOLTES
     Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']);  
     Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
     Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
+    Route::get('user/{id}/book-offers', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
+    Route::get('/user/{id}/showinfo', [UserController::class, 'getGivenUserProfileExchangeInfo']); 
+    Route::get('/user/{id}/most-exchanged-genre', [UserController::class, 'getGivenUserMostExchangedGenre']);
 
 });
 
@@ -54,11 +55,12 @@ Route::get('/most-offered-authors', [UserController::class, 'mostOfferedAuthors'
 Route::get('/most-demanded-authors', [UserController::class, 'mostDemandedAuthors']);
 Route::delete('/book-demand/{k_id}', [BookDemandController::class, 'deleteDemandedBooks']);
 Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
-Route::get('/book-offers/{id}', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
 Route::get('/users', [UserController::class, 'index']); // all users
 //Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
 Route::get('/inactive-users', [UserController::class, 'inactiveUsers']);
+
 Route::get('/most-exchanged-genre', [BookOfferController::class, 'mostExchangedGenre']);
+
 Route::get('/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
 Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']);
 Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
