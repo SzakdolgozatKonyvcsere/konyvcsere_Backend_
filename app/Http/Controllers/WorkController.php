@@ -25,8 +25,9 @@ class WorkController extends Controller
             'language' => 'required|string|max:255',
             'publication_year' => 'required|integer',
             'quality' => 'required|integer',
-            'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:2048'],
+            'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:5120'],
         ]);
+    
 
         // Genre validálása és keresése
         $genre = Genre::find($request->genre_id);
@@ -38,18 +39,14 @@ class WorkController extends Controller
         $work = Work::firstOrCreate([
             'genre_id' => $request->genre_id,
             'title' => $request->title
-        ], [
-            'created_at' => now(),
-            'updated_at' => now(),
+
         ]);
         // Publisher keresése vagy létrehozzuk
         $publisher = Publisher::firstOrCreate([
             'publisher_name' => $request->publisher
-        ], [
-            'created_at' => now(),
-            'updated_at' => now(),
+       
         ]);
-        
+
         // Felhasználó ellenőrzése
         $user = User::find($request->user);
         if (!$user) {
@@ -58,10 +55,14 @@ class WorkController extends Controller
         // Author (szerző) keresése vagy létrehozása
         $author = Author::firstOrCreate(['author_name' => $request->author]);
 
+        return response()->json([
+            'author' => $author,
+              // Visszaadjuk az új képet
+        ]);
         // Work - WrittenBy összekapcsolás (több szerző is lehet)
         WrittenBy::updateOrCreate([
-            'author' => $author->author_id,  
-            'work' => $work->work_id        
+            'author' => $author->author_id,
+            'work' => $work->work_id
         ]);
 
         // Fájlkezelés, ha van kép
@@ -73,6 +74,11 @@ class WorkController extends Controller
         } else {
             $imagePath = null;
         }
+        /*if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $path = $file->store('uploads', 'public');
+            $validatedData['image'] = asset("storage/$path"); // Elmentjük az URL-t
+        }*/
 
         // Könyv (BookOffer) adatainak mentése
         $book = BookOffer::create([
@@ -83,13 +89,14 @@ class WorkController extends Controller
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
             'book_status' => 's', // Szabad státusz alapértelmezetten
+            //'img_url' => $imagePath,
+            'book_status' => 's',
             'img_url' => $imagePath,
         ]);
 
-        // Válasz visszaadása
         return response()->json([
             'book' => $book,
-            'img_url' => $imagePath,  // Visszaadjuk az új képet
+            //'img_url' => $imagePath,  // Visszaadjuk az új képet
         ]);
     }
 }

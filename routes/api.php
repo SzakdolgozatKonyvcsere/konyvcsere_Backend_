@@ -23,12 +23,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Route::post('/mufeltoltes', [WorkController::class, 'store']);
    
     Route::get('/genres', [GenreController::class, 'index']);
-    
+    Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
     Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']);  
+    Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
+    Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
 
 });
 
-Route::post('/konyvfeltoltes', [WorkController::class, 'store']);
+
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
 
@@ -54,7 +56,7 @@ Route::delete('/book-demand/{k_id}', [BookDemandController::class, 'deleteDemand
 Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
 Route::get('/book-offers/{id}', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
 Route::get('/users', [UserController::class, 'index']); // all users
-Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
+//Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
 Route::get('/inactive-users', [UserController::class, 'inactiveUsers']);
 Route::get('/most-exchanged-genre', [BookOfferController::class, 'mostExchangedGenre']);
 Route::get('/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
@@ -62,8 +64,10 @@ Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']
 Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
 Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
 Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
-Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
+
+
 Route::get('/user/{user_id}/profile-info', [UserController::class, "getUserProfileInfo"]);
+
 Route::get('/user/{user_id}/book-offer-info', [BookOfferController::class, "getUserBookOfferInfo"]);
 Route::get('/user/{user_id}/book-demand-info', [BookDemandController::class, "getUserBookDemandInfo"]);
 Route::post('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);

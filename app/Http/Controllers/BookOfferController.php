@@ -92,17 +92,25 @@ class BookOfferController extends Controller
         return response()->json($books);
     }
 
-public function getAllBookOffersAvailable() {
+public function getAllBookOffersAvailable(Request $request) {
+    $userId = $request->user()->id;  // Az aktuális felhasználó ID-ja
     $books = DB::table('book_offers')
-        ->join('works', 'book_offers.work', '=', 'works.work_id') 
+        ->leftJoin('works', 'book_offers.work', '=', 'works.work_id') 
         ->leftJoin('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
         ->leftJoin('written_bies', 'works.work_id', '=', 'written_bies.work')
         ->leftJoin('authors', 'written_bies.author', '=', 'authors.author_id')
-        ->where('book_offers.book_status', '=', 's', 'or', 'book_offers.book_status', '=', 'f') 
-        ->select('book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+        ->leftJoin('genres', 'works.genre_id', '=', 'genres.genre_id')
+        ->leftJoin('users', 'book_offers.user', '=', 'users.id')
+        ->where(function ($query) use ($userId) {
+            $query->whereIn('book_offers.book_status', ['s', 'f'])
+                  ->where('book_offers.user', '!=', $userId);
+        })  // Csak azok a könyvek, amiket nem ő töltött fel
+        ->select('users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
         DB::raw('GROUP_CONCAT(authors.author_name SEPARATOR ", ") as authors'), 
-        'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user') 
-        ->groupBy('book_offers.offer_id','works.title', 'publishers.publisher_name', 'book_offers.book_status', 'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user')
+        'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name') 
+        ->groupBy('users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
+          'book_offers.book_status', 'book_offers.publication_year', 
+          'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name')
         ->get();
 
     return response()->json($books); 
