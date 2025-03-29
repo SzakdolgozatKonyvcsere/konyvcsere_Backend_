@@ -32,10 +32,10 @@ class BookOfferController extends Controller
                 $query->whereIn('book_offers.book_status', ['s', 'f'])
                     ->where('book_offers.user', '=', $id);
             })  // Csak azok a könyvek, amiket ő töltött fel
-            ->select('users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+            ->select('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
         DB::raw('GROUP_CONCAT(authors.author_name SEPARATOR ", ") as authors'), 
         'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name') 
-        ->groupBy('users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
+        ->groupBy('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
           'book_offers.book_status', 'book_offers.publication_year', 
           'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name')    
         ->get();
@@ -117,10 +117,10 @@ public function getAllBookOffersAvailable(Request $request) {
             $query->whereIn('book_offers.book_status', ['s', 'f'])
                   ->where('book_offers.user', '!=', $userId);
         })  // Csak azok a könyvek, amiket nem ő töltött fel
-        ->select('users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+        ->select('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
         DB::raw('GROUP_CONCAT(authors.author_name SEPARATOR ", ") as authors'), 
         'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name') 
-        ->groupBy('users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
+        ->groupBy('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
           'book_offers.book_status', 'book_offers.publication_year', 
           'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name')
         ->get();
