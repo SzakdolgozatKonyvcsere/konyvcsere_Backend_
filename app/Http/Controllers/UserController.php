@@ -132,7 +132,47 @@ class UserController extends Controller
             ->get();
 
         return response()->json($exchanges);
-    }
+    } 
+
+    /* public function givenUsersExchanges($user_id)
+    {
+        $exchanges = DB::table('exchange_histories')
+            ->leftJoin('users as interested_user', 'exchange_histories.interested_user', '=', 'interested_user.id')
+            ->leftJoin('book_offers as desired_book', 'exchange_histories.desired_item', '=', 'desired_book.offer_id')
+            ->leftJoin('users as desired_book_owner', 'desired_book.user', '=', 'desired_book_owner.id')
+            ->leftJoin('book_offers as offered_book', 'exchange_histories.offered_item', '=', 'offered_book.offer_id')
+            ->leftJoin('users as offered_book_owner', 'offered_book.user', '=', 'offered_book_owner.id')
+            
+            ->where('exchange_histories.interested_user', $user_id)
+            ->orWhereIn('desired_item', function ($query) use ($user_id) {
+                $query->select('offer_id')
+                      ->from('book_offers')
+                      ->where('user', $user_id);
+            })
+            ->orWhereIn('exchange_histories.offered_item', function ($query) use ($user_id) {
+                $query->select('offer_id')
+                      ->from('book_offers')
+                      ->where('user', $user_id);
+            })
+
+            ->select(
+                'exchange_histories.*',
+                'interested_user.name as interested_user_name',
+                'interested_user.email as interested_user_email',
+                'desired_book.*',
+                'desired_book_owner.name as desired_book_owner_name',
+                'desired_book_owner.email as desired_book_owner_email',
+                'offered_book.*',
+                'offered_book_owner.name as offered_book_owner_name',
+                'offered_book_owner.email as offered_book_owner_email'
+            )
+
+            ->get();
+
+        return response()->json($exchanges);
+        //jo lehet nem kell bele a userrel osszekotni mert azt egy masik lekerdezessel 
+        //kotom ossze ugyanugy mint a modalnal
+    } */
 
     public function getUserProfileInfo($user_id){
         $user_info = DB::select("

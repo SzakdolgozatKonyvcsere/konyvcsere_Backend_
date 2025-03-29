@@ -55,4 +55,27 @@ class ExchangeHistoryController extends Controller
 
         return response()->json($exchanges);
     }
+
+    public function givenUsersInExchanges($user_id)
+    {
+        $exchanges = DB::table('exchange_histories')
+            ->leftJoin('book_offers as desired_book', 'exchange_histories.desired_item', '=', 'desired_book.offer_id')
+            ->leftJoin('users as desired_book_owner', 'desired_book.user', '=', 'desired_book_owner.id')
+            ->leftJoin('book_offers as offered_book', 'exchange_histories.offered_item', '=', 'offered_book.offer_id')
+
+            ->where('exchange_histories.interested_user', $user_id)
+            ->orWhere('desired_book.user', $user_id)
+
+            ->select(
+                'exchange_histories.exchange_id',
+                'exchange_histories.interested_user as interested_user_id',
+                'desired_book.user as desired_book_owner_id',
+                'exchange_histories.desired_item as desired_book_id',
+                'exchange_histories.offered_item as offered_book_id',
+                'exchange_histories.exchange_status'
+            )
+            ->get();
+
+        return response()->json($exchanges);
+    }
 }
