@@ -165,6 +165,25 @@ public function getAllBookOffersAvailable(Request $request) {
         return response()->json($books);
     }
 
-    
+    //get minden konyv ami csak eltezik mindennel egyutt exchangehez
+    public function getThatBookOfferForExchange($id) {
+        $books = DB::table('book_offers')
+            ->leftJoin('works', 'book_offers.work', '=', 'works.work_id') 
+            ->leftJoin('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
+            ->leftJoin('written_bies', 'works.work_id', '=', 'written_bies.work')
+            ->leftJoin('authors', 'written_bies.author', '=', 'authors.author_id')
+            ->leftJoin('genres', 'works.genre_id', '=', 'genres.genre_id') 
+            ->leftJoin('users', 'book_offers.user', '=', 'users.id')
+            ->where('book_offers.offer_id', '=', $id)
+            ->select('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+        DB::raw('GROUP_CONCAT(authors.author_name SEPARATOR ", ") as authors'), 
+        'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name') 
+        ->groupBy('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
+          'book_offers.book_status', 'book_offers.publication_year', 
+          'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name')    
+          ->first(); // Csak egyetlen könyvet lekérni, így az elsőt kérjük
+
+        return response()->json($books); 
+    }
 
 }

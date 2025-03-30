@@ -29,7 +29,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user/{id}/showinfo', [UserController::class, 'getGivenUserProfileExchangeInfo']); 
     Route::get('/user/{id}/most-exchanged-genre', [UserController::class, 'getGivenUserMostExchangedGenre']);
     Route::get('/user/{id}/my-exchanges', [ExchangeHistoryController::class, 'givenUsersInExchanges']);
+    Route::get('/user/{id}/book-by-id', [BookOfferController::class, 'getThatBookOfferForExchange']);
 
+    
 });
 
 
