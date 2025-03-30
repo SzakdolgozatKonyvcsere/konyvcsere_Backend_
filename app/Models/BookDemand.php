@@ -11,6 +11,8 @@ class BookDemand extends Model
     /** @use HasFactory<\Database\Factories\BookDemandFactory> */
     use HasFactory;
 
+    protected $primaryKey = 'demand_id';
+
     protected $fillable = [
         'user',
         'publisher',

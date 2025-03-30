@@ -22,11 +22,23 @@ class BookOfferController extends Controller
     // USER > OFFERED BOOKS
     public function getBookOffersByUser($id) {
         $books = DB::table('book_offers')
-            ->join('works', 'book_offers.work', '=', 'works.work_id') 
-            ->join('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
-            ->where('book_offers.user', '=', $id) 
-            ->select('works.title', 'publishers.publisher_name', 'book_offers.book_status') 
-            ->get();
+            ->leftJoin('works', 'book_offers.work', '=', 'works.work_id') 
+            ->leftJoin('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
+            ->leftJoin('written_bies', 'works.work_id', '=', 'written_bies.work')
+            ->leftJoin('authors', 'written_bies.author', '=', 'authors.author_id')
+            ->leftJoin('genres', 'works.genre_id', '=', 'genres.genre_id') 
+            ->leftJoin('users', 'book_offers.user', '=', 'users.id')
+            ->where(function ($query) use ($id) {
+                $query->whereIn('book_offers.book_status', ['s', 'f'])
+                    ->where('book_offers.user', '=', $id);
+            })  // Csak azok a könyvek, amiket ő töltött fel
+            ->select('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+        DB::raw('GROUP_CONCAT(authors.author_name SEPARATOR ", ") as authors'), 
+        'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name') 
+        ->groupBy('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
+          'book_offers.book_status', 'book_offers.publication_year', 
+          'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name')    
+        ->get();
 
         return response()->json($books); 
     }
@@ -95,21 +107,22 @@ class BookOfferController extends Controller
 public function getAllBookOffersAvailable(Request $request) {
     $userId = $request->user()->id;  // Az aktuális felhasználó ID-ja
     $books = DB::table('book_offers')
-        ->join('works', 'book_offers.work', '=', 'works.work_id') 
+        ->leftJoin('works', 'book_offers.work', '=', 'works.work_id') 
         ->leftJoin('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
         ->leftJoin('written_bies', 'works.work_id', '=', 'written_bies.work')
         ->leftJoin('authors', 'written_bies.author', '=', 'authors.author_id')
         ->leftJoin('genres', 'works.genre_id', '=', 'genres.genre_id')
         ->leftJoin('users', 'book_offers.user', '=', 'users.id')
-        ->where(function ($query) {
-            $query->where('book_offers.book_status', '=', 's')
-                  ->orWhere('book_offers.book_status', '=', 'f');
-        }) 
-        ->where('book_offers.user', '!=', $userId)  // Csak azok a könyvek, amiket nem ő töltött fel
-        ->select('users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+        ->where(function ($query) use ($userId) {
+            $query->whereIn('book_offers.book_status', ['s', 'f'])
+                  ->where('book_offers.user', '!=', $userId);
+        })  // Csak azok a könyvek, amiket nem ő töltött fel
+        ->select('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
         DB::raw('GROUP_CONCAT(authors.author_name SEPARATOR ", ") as authors'), 
         'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name') 
-        ->groupBy('users.id', 'book_offers.offer_id','works.title', 'publishers.publisher_name', 'book_offers.book_status', 'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user')
+        ->groupBy('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
+          'book_offers.book_status', 'book_offers.publication_year', 
+          'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name')
         ->get();
 
     return response()->json($books); 
@@ -117,7 +130,7 @@ public function getAllBookOffersAvailable(Request $request) {
 
     public function getUserBookOfferInfo($user_id){
         $book_info = DB::select("
-            SELECT u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status, bo.created_at, bo.updated_at
+            SELECT bo.img_url, bo.offer_id, u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status, bo.created_at, bo.updated_at
             FROM book_offers bo
                 INNER JOIN users u on u.id = bo.user
                 INNER JOIN publishers p on p.publisher_id = bo.publisher
@@ -152,6 +165,25 @@ public function getAllBookOffersAvailable(Request $request) {
         return response()->json($books);
     }
 
-    
+    //get minden konyv ami csak eltezik mindennel egyutt exchangehez
+    public function getThatBookOfferForExchange($id) {
+        $books = DB::table('book_offers')
+            ->leftJoin('works', 'book_offers.work', '=', 'works.work_id') 
+            ->leftJoin('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id') 
+            ->leftJoin('written_bies', 'works.work_id', '=', 'written_bies.work')
+            ->leftJoin('authors', 'written_bies.author', '=', 'authors.author_id')
+            ->leftJoin('genres', 'works.genre_id', '=', 'genres.genre_id') 
+            ->leftJoin('users', 'book_offers.user', '=', 'users.id')
+            ->where('book_offers.offer_id', '=', $id)
+            ->select('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
+        DB::raw('GROUP_CONCAT(authors.author_name SEPARATOR ", ") as authors'), 
+        'book_offers.publication_year', 'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name') 
+        ->groupBy('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 
+          'book_offers.book_status', 'book_offers.publication_year', 
+          'book_offers.language', 'book_offers.quality', 'book_offers.user', 'genres.genre_name')    
+          ->first(); // Csak egyetlen könyvet lekérni, így az elsőt kérjük
+
+        return response()->json($books); 
+    }
 
 }
