@@ -10,6 +10,7 @@ use App\Models\Author;
 use App\Models\User;
 use App\Models\WrittenBy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WorkController extends Controller
 {
@@ -27,43 +28,58 @@ class WorkController extends Controller
             'quality' => 'required|integer',
             'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:5120'],
         ]);
-    
+
 
         // Genre validálása és keresése
         $genre = Genre::find($request->genre_id);
         if (!$genre) {
+            Log::error("Genre ID nem található: " . $request->genre_id);
             return response()->json(['error' => 'A megadott genre_id nem található!'], 400);
         }
 
         // Mű (work) keresése, ha nem létezik, létrehozzuk
-        $work = Work::firstOrCreate([
-            'genre_id' => $request->genre_id,
-            'title' => $request->title
+        $work = Work::where('genre_id', $genre->genre_id)
+            ->where('title', $request->title)
+            ->first();
+            Log::info("Létező mű keresése", ['genre_id' => $genre->genre_id, 'title' => $request->title]);
 
-        ]);
+        if (!$work) {
+            $work = Work::create([
+                'genre_id' => $genre->genre_id,
+                'title' => $request->title
+            ]);
+            
+        }
+
         // Publisher keresése vagy létrehozzuk
         $publisher = Publisher::firstOrCreate([
             'publisher_name' => $request->publisher
-       
-        ]);
 
+        ]);
+        Log::info("Kiadó feldolgozva: " . json_encode($publisher));
         // Felhasználó ellenőrzése
         $user = User::find($request->user);
         if (!$user) {
+            Log::error("Felhasználó nem található: " . $request->user);
             return response()->json(['error' => 'A felhasználó nem található!'], 400);
         }
         // Author (szerző) keresése vagy létrehozása
-        $author = Author::firstOrCreate(['author_name' => $request->author]);
-
-        return response()->json([
+        $author = Author::where('author_name', $request->author)->first();
+        if (!$author) {
+            $author = Author::create(['author_name' => $request->author]);
+            Log::info("Új szerző létrehozva: " . json_encode($author));
+        }
+        /* return response()->json([
             'author' => $author,
               // Visszaadjuk az új képet
-        ]);
+        ]); */
         // Work - WrittenBy összekapcsolás (több szerző is lehet)
         WrittenBy::updateOrCreate([
             'author' => $author->author_id,
-            'work' => $work->work_id
+            'work' => $work->work_id,
         ]);
+
+
 
         // Fájlkezelés, ha van kép
         if ($request->hasFile('img_url')) {
@@ -85,18 +101,19 @@ class WorkController extends Controller
             'user' => $request->user,
             'publisher' => $publisher->publisher_id,
             'work' => $work->work_id,
+            'author' => $author->author_id,
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
             'book_status' => 's', // Szabad státusz alapértelmezetten
-            //'img_url' => $imagePath,
-            'book_status' => 's',
             'img_url' => $imagePath,
+            
         ]);
+        Log::info("Könyv létrehozva: " . json_encode($book));
 
         return response()->json([
             'book' => $book,
-            //'img_url' => $imagePath,  // Visszaadjuk az új képet
+            'img_url' => $imagePath,  // Visszaadjuk az új képet
         ]);
     }
 }
