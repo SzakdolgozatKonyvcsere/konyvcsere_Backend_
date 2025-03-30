@@ -31,7 +31,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user/{id}/my-exchanges', [ExchangeHistoryController::class, 'givenUsersInExchanges']);
     Route::get('/user/{id}/book-by-id', [BookOfferController::class, 'getThatBookOfferForExchange']);
 
-    
+    Route::patch('/user/exchange/{exchange_id}/accept', [ExchangeHistoryController::class, 'patchAcceptExchange']); // cserefolyamat
+    Route::patch('/user/exchange/{exchange_id}/select-book', [ExchangeHistoryController::class, 'patchExchangeSelectOfferedBook']); //cserefolyamat
+
+
 });
 
 
