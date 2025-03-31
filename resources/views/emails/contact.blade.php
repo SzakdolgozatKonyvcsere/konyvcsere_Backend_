@@ -10,6 +10,6 @@
     <h1>{{ $details['subject'] }}</h1>
     <p>{{ $details['message'] }}</p>
 
-    <p>Teszt email</p>
+    <p>Adok-Kapok</p>
 </body>
 </html>
