@@ -10,6 +10,6 @@
     <h1>{{ $details['subject'] }}</h1>
     <p>{{ $details['message'] }}</p>
 
-    <p>Ha nem te küldted ezt az üzenetet, kérjük, hagyd figyelmen kívül.</p>
+    <p>Teszt email</p>
 </body>
 </html>
