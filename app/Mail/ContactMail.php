@@ -40,7 +40,7 @@ class ContactMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact',  // Az e-mail sablon
+            view: 'emails.contact',  //e-mail sablon
         );
     }
 
