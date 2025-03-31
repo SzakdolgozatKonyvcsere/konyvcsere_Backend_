@@ -10,7 +10,7 @@ class ExchangeHistory extends Model
 {
     /** @use HasFactory<\Database\Factories\ExchangeHistoryFactory> */
     use HasFactory;
-
+    protected $primaryKey = 'exchange_id';
     protected $fillable = [
         'interested_user',
         'desired_item',

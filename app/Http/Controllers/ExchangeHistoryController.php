@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\ExchangeHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ExchangeHistoryController extends Controller
 {
@@ -78,4 +81,98 @@ class ExchangeHistoryController extends Controller
 
         return response()->json($exchanges);
     }
+
+    public function patchAcceptExchange($exchange_id)
+    {
+        //Log::info("PATCH Request received with exchange_id:", ['exchange_id' => $exchange_id]);
+         // Ellenőrizzük, hogy az ID nem NULL-e
+    if (!$exchange_id) {
+        //Log::error("Invalid Exchange ID:", ['exchange_id' => $exchange_id]);
+        return response()->json(['message' => 'Exchange ID is missing'], 400);
+    }
+        // Ellenőrizzük, hogy a csere létezik-e
+        $exchange = ExchangeHistory::where('exchange_id', $exchange_id)->first();
+        //$exchange = ExchangeHistory::find($exchange_id);
+        if (!$exchange) {
+            //Log::error("Exchange not found:", ['exchange_id' => $exchange_id]);
+            return response()->json(['message' => 'Exchange not found'], 404);
+        }
+        $exchange->update([
+            'exchange_status' => 'f'
+        ]);
+
+        // Csere állapot frissítése "folyamatban" státuszra
+        /* $exchange->update([
+            'exchange_status' => 'f' // folyamatban
+        ]); */
+        //$exchange->exchange_status = $request;  // Csak a státusz változik
+        //$exchange->save();
+
+        return response()->json([
+            'message' => 'Exchange accepted successfully to f!',
+            'exchange' => $exchange
+        ], 200);
+    } 
+
+     /*public function patchAcceptExchange(Request $request, $exchange_id)
+    {
+        // Ellenőrzés: csak a státuszt küldheti a kliens
+    $request->validate([
+        'exchange_status' => 'required|in:a,k,f,v'
+    ]);
+
+    // Keresd meg az adatbázisban a megfelelő cserét
+    $exchange = ExchangeHistory::find($exchange_id);
+
+    if (!$exchange) {
+        return response()->json(['message' => 'Exchange not found'], 404);
+    }
+
+    // Státusz frissítése az új értékre
+    $exchange->exchange_status = $request->exchange_status;
+    $exchange->save();
+
+        return response()->json([
+            'message' => 'Exchange accepted successfully to f!',
+            'exchange' => $exchange
+        ], 200);
+    }*/ 
+   /*public function patchAcceptExchange(Request $request, $exchange_id)
+    {
+        $validator = Validator::make($request->all(), [
+            'exchange_status' => 'required|in:a,k,f,v'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(["message" => $validator->errors()->all()], 400);
+        }
+        $exchange = ExchangeHistory::where("exchange_id", $exchange_id)->update([
+            "exchange_status" => Hash::make($request->exchange_status),
+        ]);
+        return response()->json(["exchange" => $exchange]);
+}*/
+
+    public function patchExchangeSelectOfferedBook(Request $request, $exchange_id)
+    {
+        $request->validate([
+            'offered_item' => 'required|exists:book_offers,offer_id'
+        ]);
+
+        // Ellenőrizzük, hogy a csere létezik-e
+        $exchange = ExchangeHistory::find($exchange_id);
+        if (!$exchange) {
+            return response()->json(['message' => 'Exchange not found'], 404);
+        }
+
+        // Könyv kiválasztása
+        $exchange->update([
+            'offered_item' => $request->offered_item
+        ]);
+
+        return response()->json([
+            'message' => 'Offered book selected successfully!',
+            'exchange' => $exchange
+        ], 200);
+    }
+
+
 }
