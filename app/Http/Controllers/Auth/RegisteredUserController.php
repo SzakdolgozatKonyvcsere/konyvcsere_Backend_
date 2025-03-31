@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContactMail;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
@@ -22,7 +24,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'full_name' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
@@ -49,6 +51,15 @@ class RegisteredUserController extends Controller
             'role' => 1,
             //'img_url' => $imagePath,
         ]);
+
+        // E-mail küldése
+        $details = [
+            'email' => $request->email,
+            'subject' => 'Regisztráció sikeres',
+            'message' => 'Kedves ' . $request->full_name . ', sikeresen regisztráltál.',
+        ];
+        Mail::to($request->email)->send(new ContactMail($details));
+
 
         event(new Registered($user));
 
