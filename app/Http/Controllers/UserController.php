@@ -20,28 +20,42 @@ class UserController extends Controller
 
     function show($id){
         return User::find($id);
-    }
+    } 
     
     public function getGivenUserProfileExchangeInfo($id){
          // Beállítjuk a Carbon nyelvét magyarra
         Carbon::setLocale('hu');
 
+        // Először lekérjük a felhasználót
         $user = DB::table('users')
-        ->join('exchange_histories', 'users.id', '=', 'exchange_histories.interested_user')
-        ->where('exchange_histories.exchange_status', '=', 'a')
-        ->where('users.id', '=', $id)
-        ->select('users.*', DB::raw('COUNT(exchange_histories.exchange_id) as exchange_count'))
-        ->groupBy('users.id')
-        ->first(); // Csak egyetlen felhasználót lekérni, így az elsőt kérjük
+            ->where('users.id', '=', $id)
+            ->select('users.*') // Csak a user adatait kérjük le
+            ->first(); // Csak egyetlen felhasználót lekérni, így az elsőt kérjük
 
-        if ($user) {
-            // A created_at mezőt Carbon objektummá alakítjuk és kiszámoljuk az eltelt időt
-            // -> CARBON a created_at mező formázására
-            // -> diffForH kiszámítja az emberi olvasható formátumot
-            $user->registered_since = Carbon::parse($user->created_at)->diffForHumans();
+
+        // Ha nincs ilyen user, 404-es hiba
+        if (!$user) {
+            return response()->json(['error' => 'Felhasználó nem található!'], 404);
         }
 
-        return $user;
+        // Külön lekérdezzük az exchange_count-ot
+        $exchange_count = DB::table('exchange_histories')
+            ->where('interested_user', '=', $id)
+            ->where('exchange_status', '=', 'a')
+            ->count();
+
+        // Regisztráció ideje emberi formátumban
+         // A created_at mezőt Carbon objektummá alakítjuk és kiszámoljuk az eltelt időt
+            // -> CARBON a created_at mező formázására
+            // -> diffForH kiszámítja az emberi olvasható formátumot
+        $user->registered_since = Carbon::parse($user->created_at)->diffForHumans();
+        unset($user->created_at); // Az eredeti created_at mezőt eltávolítjuk
+
+        // Hozzáadjuk az exchange_count értéket
+        $user->exchange_count = $exchange_count;
+
+        return response()->json($user);
+            
     }
     public function getGivenUserMostExchangedGenre($userId)
     {
