@@ -22,4 +22,16 @@ class BookDemand extends Model
         'max_publication_year',
         'demand_status',
     ];
+
+    public function work()
+    {
+        return $this->belongsTo(Work::class, 'work_id');
+    }
+
+    public function publisher()
+    {
+        return $this->belongsTo(Publisher::class, 'publisher_id');
+    }
+
+
 }

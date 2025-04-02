@@ -48,7 +48,7 @@ class WorkController extends Controller
             $image = $request->file('img_url');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('books_pictures'), $imageName);
-            $imagePath = url('books_pictures/' . $imageName);
+            $imagePath = 'books_pictures/' . $imageName;
         } else {
             $imagePath = null; 
         }

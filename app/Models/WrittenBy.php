@@ -16,4 +16,14 @@ class WrittenBy extends Model
         'work',
         'author'
     ];
+
+    public function work()
+    {
+        return $this->belongsTo(Work::class, 'work_id');
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(Author::class, 'author_id');
+    }
 }

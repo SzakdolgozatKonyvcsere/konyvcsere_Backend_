@@ -12,7 +12,7 @@ class BookOffer extends Model
     use HasFactory;
 
     protected $primaryKey = "offer_id";
-    
+
     protected $fillable = [
         'user',
         'publisher',
@@ -26,6 +26,11 @@ class BookOffer extends Model
 
     public function work()
     {
-        return $this->belongsTo(Work::class, 'work');
+        return $this->belongsTo(Work::class, 'work_id');
+    }
+
+    public function publisher()
+    {
+        return $this->belongsTo(Publisher::class, 'publisher_id');
     }
 }
