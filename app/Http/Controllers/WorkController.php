@@ -79,8 +79,6 @@ class WorkController extends Controller
             'work' => $work->work_id,
         ]);
 
-
-
         // Fájlkezelés, ha van kép
         if ($request->hasFile('img_url')) {
             $image = $request->file('img_url');

@@ -114,7 +114,8 @@ public function getAllBookOffersAvailable(Request $request) {
         ->leftJoin('genres', 'works.genre_id', '=', 'genres.genre_id')
         ->leftJoin('users', 'book_offers.user', '=', 'users.id')
         ->where(function ($query) use ($userId) {
-            $query->whereIn('book_offers.book_status', ['s', 'f'])
+            //$query->whereIn('book_offers.book_status', ['s', 'f'])
+            $query->whereIn('book_offers.book_status', ['s'])
                   ->where('book_offers.user', '!=', $userId);
         })  // Csak azok a könyvek, amiket nem ő töltött fel
         ->select('book_offers.img_url', 'users.id', 'book_offers.offer_id', 'works.title', 'publishers.publisher_name', 'book_offers.book_status', 
