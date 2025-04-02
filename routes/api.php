@@ -37,12 +37,45 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('/user/exchange/{exchange_id}/select-book', [ExchangeHistoryController::class, 'patchExchangeSelectOfferedBook']); //cserefolyamat
 
 
+// Kintrol behozva:
+
+    //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
+
+
+    Route::get('/authorworks/{author_name}', [UserController::class, 'authorAllWorks']);
+    Route::get('/most-offered-authors', [UserController::class, 'mostOfferedAuthors']);
+    Route::get('/most-demanded-authors', [UserController::class, 'mostDemandedAuthors']);
+    Route::delete('/book-demand/{k_id}', [BookDemandController::class, 'deleteDemandedBooks']);
+    Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
+
+    //Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
+    Route::get('/inactive-users', [UserController::class, 'inactiveUsers']);
+
+    Route::get('/most-exchanged-genre', [BookOfferController::class, 'mostExchangedGenre']);
+
+    Route::get('/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
+    Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']);
+    Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
+    Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
+    Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
+
+
+    Route::get('/user/{user_id}/profile-info', [UserController::class, "getUserProfileInfo"]);
+
+    Route::get('/user/{user_id}/book-offer-info', [BookOfferController::class, "getUserBookOfferInfo"]);
+    Route::get('/user/{user_id}/book-demand-info', [BookDemandController::class, "getUserBookDemandInfo"]);
+    Route::post('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
+    Route::get('/new-book-offers', [BookOfferController::class, 'newBookOffers']);
+    Route::put('/book-demands/{id}/user-update', [BookDemandController::class, 'userUpdate']);
+    Route::put('/book-offers/{id}/user-update', [BookDemandController::class, 'userUpdate']);
+
 });
 
 
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
-
+    Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
+    Route::get('/users', [UserController::class, 'index']); // all users
 });
 
 
@@ -50,36 +83,3 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
 
 
 
-
-Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
-
-
-
-//Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
-
-
-Route::get('/authorworks/{author_name}', [UserController::class, 'authorAllWorks']);
-Route::get('/most-offered-authors', [UserController::class, 'mostOfferedAuthors']);
-Route::get('/most-demanded-authors', [UserController::class, 'mostDemandedAuthors']);
-Route::delete('/book-demand/{k_id}', [BookDemandController::class, 'deleteDemandedBooks']);
-Route::get('/book-demands', [BookDemandController::class, 'bookDemandsWithUsers']); //Books requested by users
-Route::get('/users', [UserController::class, 'index']); // all users
-//Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
-Route::get('/inactive-users', [UserController::class, 'inactiveUsers']);
-
-Route::get('/most-exchanged-genre', [BookOfferController::class, 'mostExchangedGenre']);
-
-Route::get('/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
-Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']);
-Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
-Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
-Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
-
-
-Route::get('/user/{user_id}/profile-info', [UserController::class, "getUserProfileInfo"]);
-
-Route::get('/user/{user_id}/book-offer-info', [BookOfferController::class, "getUserBookOfferInfo"]);
-Route::get('/user/{user_id}/book-demand-info', [BookDemandController::class, "getUserBookDemandInfo"]);
-Route::post('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
-Route::get('/new-book-offers', [BookOfferController::class, 'newBookOffers']);
-Route::put('/book-demands/{id}/user-update', [BookDemandController::class, 'userUpdate']);

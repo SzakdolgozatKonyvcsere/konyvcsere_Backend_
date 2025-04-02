@@ -43,6 +43,7 @@ class WorkController extends Controller
         // A szerző és kép kezelése
         $author = Author::firstOrCreate(['author_name' => $request->author]);
 
+        // Fájlkezelés, ha van kép
         // Kép feltöltése, ha van
         if ($request->hasFile('img_url')) {
             $image = $request->file('img_url');
