@@ -193,12 +193,18 @@ class BookOfferController extends Controller
     public function getUserBookOfferInfo($user_id)
     {
         $book_info = DB::select("
-            SELECT bo.img_url, bo.offer_id, u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status, bo.created_at, bo.updated_at
+            SELECT bo.img_url, bo.offer_id, u.name, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status, bo.created_at, bo.updated_at, 
+                (SELECT GROUP_CONCAT(a.author_name SEPARATOR \", \") 
+                FROM written_bies wb 
+                LEFT JOIN authors a ON a.author_id = wb.author
+                WHERE wb.work = w.work_id) AS authors
             FROM book_offers bo
-                INNER JOIN users u on u.id = bo.user
-                INNER JOIN publishers p on p.publisher_id = bo.publisher
-                INNER JOIN works w on w.work_id = bo.work
-                INNER JOIN genres g on g.genre_id = w.genre_id
+                LEFT JOIN users u on u.id = bo.user
+                LEFT JOIN publishers p on p.publisher_id = bo.publisher
+                LEFT JOIN works w on w.work_id = bo.work
+                LEFT JOIN genres g on g.genre_id = w.genre_id
+                LEFT JOIN written_bies wb on wb.work = w.work_id
+                LEFT JOIN authors a on a.author_id = wb.author
             WHERE bo.user = $user_id
         ");
 
