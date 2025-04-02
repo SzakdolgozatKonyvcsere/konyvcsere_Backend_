@@ -67,6 +67,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
     Route::get('/new-book-offers', [BookOfferController::class, 'newBookOffers']);
     Route::put('/book-demands/{id}/user-update', [BookDemandController::class, 'userUpdate']);
+    Route::put('/book-offers/{id}/user-update', [BookDemandController::class, 'userUpdate']);
 
 });
 

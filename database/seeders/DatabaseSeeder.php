@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(30),
             'role' => 0,
             'online_status' => 0,
-            'img_url' => 'user_basic_pfp.jpg'
+            'img_url' => 'profile_pictures/user_basic_pfp.jpg'
         ]);
 
         User::factory()->create([
@@ -58,7 +58,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(30),
             'role' => 1,
             'online_status' => 0,
-            'img_url' => 'user_basic_pfp.jpg'
+            'img_url' => 'profile_pictures/user_basic_pfp.jpg'
         ]);
         
         User::factory()->create([
@@ -70,7 +70,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(30),
             'role' => 1,
             'online_status' => 0,
-            'img_url' => 'user_basic_pfp.jpg'
+            'img_url' => 'profile_pictures/user_basic_pfp.jpg'
         ]);
         User::factory()->create([
             'name' => 'test_theodore',
@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(30),
             'role' => 1,
             'online_status' => 0,
-            'img_url' => 'user_basic_pfp.jpg'
+            'img_url' => 'profile_pictures/user_basic_pfp.jpg'
         ]);
         User::factory()->create([
             'name' => 'test_marika',
@@ -92,7 +92,7 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(30),
             'role' => 1,
             'online_status' => 0,
-            'img_url' => 'user_basic_pfp.jpg'
+            'img_url' => 'profile_pictures/user_basic_pfp.jpg'
         ]);
         
 
