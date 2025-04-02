@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\WrittenBy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class WorkController extends Controller
 {
@@ -30,6 +31,7 @@ class WorkController extends Controller
         ]);
 
         $genre = Genre::find($request->genre_id);
+
         $work = Work::firstOrCreate([
             'genre_id' => $request->genre_id,
             'title' => $request->title,
@@ -52,9 +54,9 @@ class WorkController extends Controller
         }
 
         // Kapcsolat létrehozása a szerző és a mű között
-        $writtenby = WrittenBy::firstOrCreate([
-            'author' => $request->author_id,
-            'work' => $request->work_id,
+        DB::table('written_bies')->updateOrInsert([
+            'author' => $author->author_id,
+            'work' => $work->work_id,
         ]);
 
         // Könyv (BookOffer) adatainak mentése
@@ -71,7 +73,6 @@ class WorkController extends Controller
         ]);
 
         return response()->json([
-            'writtenby' => $writtenby,
             'book' => $book,
         ]);
     }

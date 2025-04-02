@@ -11,8 +11,13 @@ class Author extends Model
     /** @use HasFactory<\Database\Factories\AuthorFactory> */
     use HasFactory;
 
+    protected $primaryKey = 'author_id'; 
+    public $incrementing = true;
+    protected $keyType = 'int';
+
     protected $fillable = ['author_name'];
 
+   
     public function writtenbies()
     {
         return $this->hasMany(WrittenBy::class);
