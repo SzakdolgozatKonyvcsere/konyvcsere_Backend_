@@ -16,7 +16,7 @@ class WorkController extends Controller
 {
     public function store(Request $request)
     {
-        // Validáció az adatbázisban való meglétre és a szükséges mezőkre
+        // Validáció az alapadatokhoz
         $request->validate([
             'genre_id' => 'required|exists:genres,genre_id',
             'title' => 'required|string|max:255',
@@ -29,75 +29,39 @@ class WorkController extends Controller
             'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:5120'],
         ]);
 
-
-        // Genre validálása és keresése
         $genre = Genre::find($request->genre_id);
-        if (!$genre) {
-            Log::error("Genre ID nem található: " . $request->genre_id);
-            return response()->json(['error' => 'A megadott genre_id nem található!'], 400);
-        }
-
-        // Mű (work) keresése, ha nem létezik, létrehozzuk
-        $work = Work::where('genre_id', $genre->genre_id)
-            ->where('title', $request->title)
-            ->first();
-            Log::info("Létező mű keresése", ['genre_id' => $genre->genre_id, 'title' => $request->title]);
-
-        if (!$work) {
-            $work = Work::create([
-                'genre_id' => $genre->genre_id,
-                'title' => $request->title
-            ]);
-            
-        }
+        $work = Work::firstOrCreate([
+            'genre_id' => $request->genre_id,
+            'title' => $request->title,
+        ]);
 
         // Publisher keresése vagy létrehozzuk
-        $publisher = Publisher::firstOrCreate([
-            'publisher_name' => $request->publisher
+        $publisher = Publisher::firstOrCreate(['publisher_name' => $request->publisher]);
 
-        ]);
-        Log::info("Kiadó feldolgozva: " . json_encode($publisher));
-        // Felhasználó ellenőrzése
-        $user = User::find($request->user);
-        if (!$user) {
-            Log::error("Felhasználó nem található: " . $request->user);
-            return response()->json(['error' => 'A felhasználó nem található!'], 400);
-        }
-        // Author (szerző) keresése vagy létrehozása
-        $author = Author::where('author_name', $request->author)->first();
-        if (!$author) {
-            $author = Author::create(['author_name' => $request->author]);
-            Log::info("Új szerző létrehozva: " . json_encode($author));
-        }
-        /* return response()->json([
-            'author' => $author,
-              // Visszaadjuk az új képet
-        ]); */
-        // Work - WrittenBy összekapcsolás (több szerző is lehet)
-        WrittenBy::updateOrCreate([
-            'author' => $author->author_id,
-            'work' => $work->work_id,
-        ]);
+        // A szerző és kép kezelése
+        $author = Author::firstOrCreate(['author_name' => $request->author]);
 
         // Fájlkezelés, ha van kép
+        // Kép feltöltése, ha van
         if ($request->hasFile('img_url')) {
             $image = $request->file('img_url');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/books'), $imageName);
-            $imagePath = url('uploads/books/' . $imageName);
+            $image->move(public_path('books_pictures'), $imageName);
+            $imagePath = url('books_pictures/' . $imageName);
         } else {
-            $imagePath = null;
+            $imagePath = null; // Ha nincs kép
         }
-        /*if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $path = $file->store('uploads', 'public');
-            $validatedData['image'] = asset("storage/$path"); // Elmentjük az URL-t
-        }*/
+
+        // Kapcsolat létrehozása a szerző és a mű között
+        $writtenby = WrittenBy::firstOrCreate([
+            'author' => $request->author_id,
+            'work' => $request->work_id,
+        ]);
 
         // Könyv (BookOffer) adatainak mentése
         $book = BookOffer::create([
             'user' => $request->user,
-            'publisher' => $publisher->publisher_id,
+            'publisher' => $publisher->publisher_id, // Ha van külön publisher_id, azt itt kell megadni
             'work' => $work->work_id,
             'author' => $author->author_id,
             'language' => $request->language,
@@ -105,13 +69,11 @@ class WorkController extends Controller
             'quality' => $request->quality,
             'book_status' => 's', // Szabad státusz alapértelmezetten
             'img_url' => $imagePath,
-            
         ]);
-        Log::info("Könyv létrehozva: " . json_encode($book));
 
         return response()->json([
+            'writtenby' => $writtenby,
             'book' => $book,
-            'img_url' => $imagePath,  // Visszaadjuk az új képet
         ]);
     }
 }

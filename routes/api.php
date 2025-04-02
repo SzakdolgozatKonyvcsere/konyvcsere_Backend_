@@ -21,7 +21,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
    
     Route::get('/genres', [GenreController::class, 'index']);
+
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']); //KONYVFELTOLTES
+    
     Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']);  
     Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
     Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
