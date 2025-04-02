@@ -33,9 +33,10 @@ class WorkController extends Controller
         $genre = Genre::find($request->genre_id);
 
         $work = Work::firstOrCreate([
-            'genre_id' => $request->$genre->genre_id,// genre_id eredetileg
+            'genre_id' => $genre->genre_id,
             'title' => $request->title,
         ]);
+
 
         // Publisher keresése vagy létrehozzuk
         $publisher = Publisher::firstOrCreate(['publisher_name' => $request->publisher]);
@@ -50,7 +51,7 @@ class WorkController extends Controller
             $image->move(public_path('books_pictures'), $imageName);
             $imagePath = url('books_pictures/' . $imageName);
         } else {
-            $imagePath = null; 
+            $imagePath = null;
         }
 
         // Kapcsolat létrehozása a szerző és a mű között
@@ -62,7 +63,7 @@ class WorkController extends Controller
         // Könyv (BookOffer) adatainak mentése
         $book = BookOffer::create([
             'user' => $request->user,
-            'publisher' => $publisher->publisher_id, 
+            'publisher' => $publisher->publisher_id,
             'work' => $work->work_id,
             'author' => $author->author_id,
             'language' => $request->language,
