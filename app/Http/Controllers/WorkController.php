@@ -17,7 +17,7 @@ class WorkController extends Controller
 {
     public function store(Request $request)
     {
-        // Validáció az alapadatokhoz
+        // Validáció
         $request->validate([
             'genre_id' => 'required|exists:genres,genre_id',
             'title' => 'required|string|max:255',
@@ -44,14 +44,13 @@ class WorkController extends Controller
         $author = Author::firstOrCreate(['author_name' => $request->author]);
 
         // Fájlkezelés, ha van kép
-        // Kép feltöltése, ha van
         if ($request->hasFile('img_url')) {
             $image = $request->file('img_url');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('books_pictures'), $imageName);
             $imagePath = url('books_pictures/' . $imageName);
         } else {
-            $imagePath = null; // Ha nincs kép
+            $imagePath = null; 
         }
 
         // Kapcsolat létrehozása a szerző és a mű között
@@ -63,7 +62,7 @@ class WorkController extends Controller
         // Könyv (BookOffer) adatainak mentése
         $book = BookOffer::create([
             'user' => $request->user,
-            'publisher' => $publisher->publisher_id, // Ha van külön publisher_id, azt itt kell megadni
+            'publisher' => $publisher->publisher_id, 
             'work' => $work->work_id,
             'author' => $author->author_id,
             'language' => $request->language,
