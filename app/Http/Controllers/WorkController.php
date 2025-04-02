@@ -11,12 +11,13 @@ use App\Models\User;
 use App\Models\WrittenBy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class WorkController extends Controller
 {
     public function store(Request $request)
     {
-        // Validáció az alapadatokhoz
+        // Validáció
         $request->validate([
             'genre_id' => 'required|exists:genres,genre_id',
             'title' => 'required|string|max:255',
@@ -30,6 +31,7 @@ class WorkController extends Controller
         ]);
 
         $genre = Genre::find($request->genre_id);
+
         $work = Work::firstOrCreate([
             'genre_id' => $request->$genre->genre_id,// genre_id eredetileg
             'title' => $request->title,
@@ -42,37 +44,35 @@ class WorkController extends Controller
         $author = Author::firstOrCreate(['author_name' => $request->author]);
 
         // Fájlkezelés, ha van kép
-        // Kép feltöltése, ha van
         if ($request->hasFile('img_url')) {
             $image = $request->file('img_url');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('books_pictures'), $imageName);
             $imagePath = url('books_pictures/' . $imageName);
         } else {
-            $imagePath = null; // Ha nincs kép
+            $imagePath = null; 
         }
 
         // Kapcsolat létrehozása a szerző és a mű között
-        $writtenby = WrittenBy::firstOrCreate([
-            'author' => $request->author_id,
-            'work' => $request->work_id,
+        DB::table('written_bies')->updateOrInsert([
+            'author' => $author->author_id,
+            'work' => $work->work_id,
         ]);
 
         // Könyv (BookOffer) adatainak mentése
         $book = BookOffer::create([
             'user' => $request->user,
-            'publisher' => $publisher->publisher_id, // Ha van külön publisher_id, azt itt kell megadni
+            'publisher' => $publisher->publisher_id, 
             'work' => $work->work_id,
             'author' => $author->author_id,
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
-            'book_status' => 's', // Szabad státusz alapértelmezetten
+            'book_status' => 's', // Szabad státusz alapértelmezetten 
             'img_url' => $imagePath,
         ]);
 
         return response()->json([
-            'writtenby' => $writtenby,
             'book' => $book,
         ]);
     }
