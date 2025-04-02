@@ -18,4 +18,9 @@ class Work extends Model
         'genre_id',
         'title'
     ];
+
+    public function genre()
+    {
+        return $this->belongsTo(Genre::class, 'genre_id');
+    }
 }

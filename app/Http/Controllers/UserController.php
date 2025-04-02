@@ -234,7 +234,7 @@ class UserController extends Controller
         $user = Auth::user();
     
         //Ha volt régi kép, töröljük
-        if ($user->img_url && !str_contains($user->img_url, 'https://i.pinimg.com/1200x/2c/47/d5/2c47d5dd5b532f83bb55c4cd6f5bd1ef.jpg')) {
+        if ($user->img_url && !str_contains($user->img_url, 'profile_pictures/user_basic_pfp.jpg')) {
             // Ezt a default értéket pls ignore, majd beköltözik egyszer a public-ba 
             $oldImagePath = public_path($user->img_url);
             if (file_exists($oldImagePath)) {
