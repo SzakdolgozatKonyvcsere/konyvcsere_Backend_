@@ -72,8 +72,11 @@ class BookDemandController extends Controller
         $publisherId = $publisher->publisher_id;
         }
 
-        $genre = Genre::firstOrCreate(['genre_id' => $validatedData['genre_id']]);
-
+        $genre = Genre::where('genre_id', $validatedData['genre_id'])->first();
+        if (!$genre) {
+            return response()->json(['hiba' => 'Műfaj nem található'], 400);
+        }
+        
         $work = Work::firstOrCreate(
             ['title' => $validatedData['title']],
             ['title' => $validatedData['title'], 'genre_id' => $genre->genre_id]
@@ -87,8 +90,9 @@ class BookDemandController extends Controller
 
         $bookDemand->update([
             'publisher_id' => $publisherId, 
-            'work_id' => $work->id,            
+            'title' => $work->title,  
             'language' => $validatedData['language'],
+            'genre_id' => $work->genre_id,          
             'min_publication_year' => $validatedData['min_publication_year'],
             'max_publication_year' => $validatedData['max_publication_year']
         ]);

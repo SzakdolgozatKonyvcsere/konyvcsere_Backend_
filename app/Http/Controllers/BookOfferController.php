@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\BookOffer;
 use App\Models\ExchangeHistory;
+use App\Models\Genre;
+use App\Models\Publisher;
 use App\Models\Work;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
@@ -233,6 +235,61 @@ public function getAllBookOffersAvailable(Request $request) {
         ");
 
         return response()->json($book_info);
+    }
+
+    public function userUpdate(Request $request, $id)
+    {        
+        $validatedData = $request->validate([
+            'publisher_name' => 'required|string|max:255',
+            'genre_id' => 'required|integer|max:255',
+            'title' => 'required|string|max:255',
+            'language' => 'required|string|max:255',
+            'quality' => 'required|integer|max:255',
+            'publication_year' => 'required|integer|min:1700|max:' . date('Y'),
+            'img_url' => 'image|mimes:jpeg,png,jpg,gif|max:5000'
+        ]);
+
+        $publisherId = null;
+        if ($validatedData['publisher_name']) { // Ell. hogy van-e megadott kiadó név
+            $publisher = Publisher::where('publisher_name', $validatedData['publisher_name'])->first();
+        if (!$publisher) {
+            $publisher = Publisher::create(['publisher_name' => $validatedData['publisher_name']]);
+        }
+        $publisherId = $publisher->publisher_id;
+        }
+
+        $genre = Genre::where('genre_id', $validatedData['genre_id'])->first();
+        if (!$genre) {
+            return response()->json(['hiba' => 'Műfaj nem található'], 400);
+        }
+
+        $work = Work::firstOrCreate(
+            ['title' => $validatedData['title']],
+            ['title' => $validatedData['title'], 'genre_id' => $genre->genre_id]
+        );
+
+        $bookOffer = BookOffer::where('offer_id', $id)->first();
+        if (!$bookOffer) {
+            return response()->json(['hiba' => 'Könyv nem található'], 404);
+        }
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('books_pictures'), $filename);
+            $bookOffer->img_url = 'books_pictures/' . $filename;
+        }
+
+        $bookOffer->update([
+            'publisher_id' => $publisherId,
+            'genre_id' => $work->genre_id,
+            'title' => $work->title,
+            'language' => $validatedData['language'],
+            'quality' => $validatedData['quality'],
+            'publication_year' => $validatedData['publication_year'],
+        ]);
+        
+        return response()->json(['message' => 'Sikeresen frissítve', 'data' => $bookOffer], 200);
     }
 
     public function newBookOffers()

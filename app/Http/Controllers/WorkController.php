@@ -31,7 +31,7 @@ class WorkController extends Controller
 
         $genre = Genre::find($request->genre_id);
         $work = Work::firstOrCreate([
-            'genre_id' => $request->genre_id,
+            'genre_id' => $request->$genre->genre_id,// genre_id eredetileg
             'title' => $request->title,
         ]);
 

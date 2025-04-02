@@ -11,6 +11,8 @@ class BookOffer extends Model
     /** @use HasFactory<\Database\Factories\BookOfferFactory> */
     use HasFactory;
 
+    protected $primaryKey = "offer_id";
+    
     protected $fillable = [
         'user',
         'publisher',
