@@ -65,11 +65,11 @@ class BookDemandController extends Controller
 
         $publisherId = null;
         if ($validatedData['publisher_name']) { // Ell. hogy van-e megadott kiadó név
-            $publisher = Publisher::firstOrCreate(
-                ['publisher_name' => $validatedData['publisher_name']],
-                ['publisher_name' => $validatedData['publisher_name']]
-            );
-            $publisherId = $publisher->id;
+            $publisher = Publisher::where('publisher_name', $validatedData['publisher_name'])->first();
+        if (!$publisher) {
+            $publisher = Publisher::create(['publisher_name' => $validatedData['publisher_name']]);
+        }
+        $publisherId = $publisher->publisher_id;
         }
 
         $genre = Genre::firstOrCreate(['genre_id' => $validatedData['genre_id']]);
