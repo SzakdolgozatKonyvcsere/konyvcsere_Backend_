@@ -68,7 +68,7 @@ class WorkController extends Controller
             'language' => $request->language,
             'publication_year' => $request->publication_year,
             'quality' => $request->quality,
-            'book_status' => 's', // Szabad státusz alapértelmezetten
+            'book_status' => 's', // Szabad státusz alapértelmezetten 
             'img_url' => $imagePath,
         ]);
 
