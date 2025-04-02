@@ -28,7 +28,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2022,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/LegyJoMindhalaligMoricz.jpg' // Kép elérési útja
+                'img_url' => 'books_pictures/LegyJoMindhalaligMoricz.jpg' // Kép elérési útja
 
             ],
             [
@@ -39,7 +39,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2019,
                 'quality' => 4,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/kosztolanyiedesanna.jpg'
+                'img_url' => 'books_pictures/kosztolanyiedesanna.jpg'
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
@@ -49,7 +49,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2013,
                 'quality' => 3,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/RokonokMoricz.jpg'
+                'img_url' => 'books_pictures/RokonokMoricz.jpg'
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
@@ -59,7 +59,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2021,
                 'quality' => 4,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/KoszivuEuropaK.jpg'
+                'img_url' => 'books_pictures/KoszivuEuropaK.jpg'
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
@@ -69,7 +69,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2024,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/UtasEsHoldvilagSzerb.jpg'
+                'img_url' => 'books_pictures/UtasEsHoldvilagSzerb.jpg'
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
@@ -79,7 +79,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2023,
                 'quality' => 4,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/NemEgyszeruLeiner.jpg'
+                'img_url' => 'books_pictures/NemEgyszeruLeiner.jpg'
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
@@ -89,7 +89,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2015,
                 'quality' => 3,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/RubinvorosGier.jpg'
+                'img_url' => 'books_pictures/RubinvorosGier.jpg'
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
@@ -99,7 +99,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2024,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/OsziBorzongasChristie.jpg'
+                'img_url' => 'books_pictures/OsziBorzongasChristie.jpg'
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
@@ -109,7 +109,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2022,
                 'quality' => 4,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/EgriCsillagokKreativK.jpg'
+                'img_url' => 'books_pictures/EgriCsillagokKreativK.jpg'
             ],
             // elcserelve + atadve - e + a
             [
@@ -120,7 +120,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2016,
                 'quality' => 4,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/KincsesSzigetStevenson.jpg'
+                'img_url' => 'books_pictures/KincsesSzigetStevenson.jpg'
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
@@ -130,7 +130,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2024,
                 'quality' => 5,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/SzigetiVeszedelemZrinyi.jpg'
+                'img_url' => 'books_pictures/SzigetiVeszedelemZrinyi.jpg'
             ],
             // foglalt + kezdemenyezes - f + k
             [
@@ -141,7 +141,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2024,
                 'quality' => 5,
                 'book_status' => 'f',
-                'img_url' => 'uploaded_books/UtasEsHoldvilagSzerb.jpg'
+                'img_url' => 'books_pictures/UtasEsHoldvilagSzerb.jpg'
             ],
 
             
@@ -156,7 +156,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2023,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/LelekragcsalokPopper.jpg'
+                'img_url' => 'books_pictures/LelekragcsalokPopper.jpg'
             ],
             [
                 'user' => User::where('id', 3)->value('id'),
@@ -166,7 +166,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2025,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/HobbitTolkien.jpg'
+                'img_url' => 'books_pictures/HobbitTolkien.jpg'
             ],
             [
                 'user' => User::where('id', 3)->value('id'),
@@ -176,7 +176,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2016,
                 'quality' => 2,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/SzornyekTengereRiordan.jpg'
+                'img_url' => 'books_pictures/SzornyekTengereRiordan.jpg'
             ],
             [
                 'user' => User::where('id', 3)->value('id'),
@@ -186,7 +186,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2011,
                 'quality' => 4,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/BelenkEgettMultBagdy.jpg'
+                'img_url' => 'books_pictures/BelenkEgettMultBagdy.jpg'
             ],
             [
                 'user' => User::where('id', 3)->value('id'),
@@ -196,7 +196,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2023,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/CsipkerozsikakKing.jpg'
+                'img_url' => 'books_pictures/CsipkerozsikakKing.jpg'
             ],
             [
                 'user' => User::where('id', 3)->value('id'),
@@ -206,7 +206,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2001,
                 'quality' => 3,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/HPholland.jpg'
+                'img_url' => 'books_pictures/HPholland.jpg'
             ],
             // elcserelve + atadve - e + a
             [
@@ -217,7 +217,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2009,
                 'quality' => 3,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/NemZorogAHarasztChristie.jpg'
+                'img_url' => 'books_pictures/NemZorogAHarasztChristie.jpg'
             ],
             [
                 'user' => User::where('id', 3)->value('id'),
@@ -227,7 +227,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 1990,
                 'quality' => 2,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/WritingProcessPinnels.jpg'
+                'img_url' => 'books_pictures/WritingProcessPinnels.jpg'
             ],
             [
                 'user' => User::where('id', 3)->value('id'),
@@ -237,7 +237,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2022,
                 'quality' => 4,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/ApendragonLegendaSzerb.jpg'
+                'img_url' => 'books_pictures/ApendragonLegendaSzerb.jpg'
             ],
 
             //3. felh: id:4, Theodore
@@ -250,7 +250,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 1987,
                 'quality' => 3,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/MarciusiSzelKuzmicsov.jpg'
+                'img_url' => 'books_pictures/MarciusiSzelKuzmicsov.jpg'
             ],
             [
                 'user' => User::where('id', 4)->value('id'),
@@ -260,7 +260,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 1951,
                 'quality' => 4,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/AcelEsSalakPopov.jpg'
+                'img_url' => 'books_pictures/AcelEsSalakPopov.jpg'
             ],
             [
                 'user' => User::where('id', 4)->value('id'),
@@ -270,7 +270,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2004,
                 'quality' => 4,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/TheDaVinciCodeBrown.jpg'
+                'img_url' => 'books_pictures/TheDaVinciCodeBrown.jpg'
             ],
             [
                 'user' => User::where('id', 4)->value('id'),
@@ -280,7 +280,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2025,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/MegszolalAzAlarendeltZsadanyi.jpg'
+                'img_url' => 'books_pictures/MegszolalAzAlarendeltZsadanyi.jpg'
             ],
             [
                 'user' => User::where('id', 4)->value('id'),
@@ -290,7 +290,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2023,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/EgriCsillagokEuropaK.jpg'
+                'img_url' => 'books_pictures/EgriCsillagokEuropaK.jpg'
             ],
             
             // elcserelve + atadve - e + a
@@ -302,7 +302,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 1963,
                 'quality' => 3,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/HazaiTukorTamasi.jpg'
+                'img_url' => 'books_pictures/HazaiTukorTamasi.jpg'
             ],
             [
                 'user' => User::where('id', 4)->value('id'),
@@ -312,7 +312,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2021,
                 'quality' => 5,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/ASzellemCGJung.jpg'
+                'img_url' => 'books_pictures/ASzellemCGJung.jpg'
             ],
             // foglalt + folyamatban - f + f
             [
@@ -323,7 +323,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2024,
                 'quality' => 5,
                 'book_status' => 'f',
-                'img_url' => 'uploaded_books/GoirotApoBalzac.jpg'
+                'img_url' => 'books_pictures/GoirotApoBalzac.jpg'
             ],
 
 
@@ -337,7 +337,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2023,
                 'quality' => 5,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/KoszivuNogradiJokai.jpg'
+                'img_url' => 'books_pictures/KoszivuNogradiJokai.jpg'
             ],
             [
                 'user' => User::where('id', 5)->value('id'),
@@ -347,7 +347,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2016,
                 'quality' => 2,
                 'book_status' => 's',
-                'img_url' => 'uploaded_books/RopiNaplojaKinney.jpg'
+                'img_url' => 'books_pictures/RopiNaplojaKinney.jpg'
             ],
             //elcserelt + atadva - e + a
             [
@@ -358,7 +358,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2020,
                 'quality' => 5,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/AllatfarmOrwell.jpg'
+                'img_url' => 'books_pictures/AllatfarmOrwell.jpg'
             ],
             [
                 'user' => User::where('id', 5)->value('id'),
@@ -368,7 +368,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2022,
                 'quality' => 5,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/JanosVitezPetofi.jpg'
+                'img_url' => 'books_pictures/JanosVitezPetofi.jpg'
             ],
             [
                 'user' => User::where('id', 5)->value('id'),
@@ -378,7 +378,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2023,
                 'quality' => 3,
                 'book_status' => 'e',
-                'img_url' => 'uploaded_books/OtKismalacChristie.jpg'
+                'img_url' => 'books_pictures/OtKismalacChristie.jpg'
             ],
             // foglalt + kezdemenyezes - f + k
             [
@@ -389,7 +389,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2024,
                 'quality' => 5,
                 'book_status' => 'f',
-                'img_url' => 'uploaded_books/EstiKornelKosztolanyi.jpg'
+                'img_url' => 'books_pictures/EstiKornelKosztolanyi.jpg'
             ],
             [
                 'user' => User::where('id', 5)->value('id'),
@@ -399,7 +399,7 @@ class Book_OffersTableSeeder extends Seeder
                 'publication_year' => 2014,
                 'quality' => 5,
                 'book_status' => 'f',
-                'img_url' => 'uploaded_books/HorthyMiklosTubucz.jpg'
+                'img_url' => 'books_pictures/HorthyMiklosTubucz.jpg'
             ],
 
             
