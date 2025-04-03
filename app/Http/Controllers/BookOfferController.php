@@ -273,29 +273,26 @@ class BookOfferController extends Controller
             'img_url' => 'image|mimes:jpeg,png,jpg,gif|max:5000'
         ]);
 
-        $publisherId = null;
-        if ($validatedData['publisher_name']) { // Ell. hogy van-e megadott kiadó név
-            $publisher = Publisher::where('publisher_name', $validatedData['publisher_name'])->first();
-        if (!$publisher) {
-            $publisher = Publisher::create(['publisher_name' => $validatedData['publisher_name']]);
+        $bookOffer = BookOffer::where('offer_id', $id)->first();
+        if (!$bookOffer) {
+            return response()->json(['hiba' => 'Könyv nem található'], 404);
         }
+
+        $publisher = Publisher::firstOrCreate([
+            'publisher_name' => $validatedData['publisher_name']
+        ]);
+        
         $publisherId = $publisher->publisher_id;
-        }
 
         $genre = Genre::where('genre_id', $validatedData['genre_id'])->first();
         if (!$genre) {
             return response()->json(['hiba' => 'Műfaj nem található'], 400);
         }
 
-        $work = Work::firstOrCreate(
+        $work = Work::updateOrCreate(
             ['title' => $validatedData['title']],
             ['title' => $validatedData['title'], 'genre_id' => $genre->genre_id]
         );
-
-        $bookOffer = BookOffer::where('offer_id', $id)->first();
-        if (!$bookOffer) {
-            return response()->json(['hiba' => 'Könyv nem található'], 404);
-        }
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -306,8 +303,7 @@ class BookOfferController extends Controller
 
         $bookOffer->update([
             'publisher_id' => $publisherId,
-            'genre_id' => $work->genre_id,
-            'title' => $work->title,
+            'work_id' => $work->id,
             'language' => $validatedData['language'],
             'quality' => $validatedData['quality'],
             'publication_year' => $validatedData['publication_year'],
