@@ -253,8 +253,6 @@ class BookOfferController extends Controller
                 LEFT JOIN publishers p on p.publisher_id = bo.publisher
                 LEFT JOIN works w on w.work_id = bo.work
                 LEFT JOIN genres g on g.genre_id = w.genre_id
-                LEFT JOIN written_bies wb on wb.work = w.work_id
-                LEFT JOIN authors a on a.author_id = wb.author
             WHERE bo.user = $user_id
         ");
 
