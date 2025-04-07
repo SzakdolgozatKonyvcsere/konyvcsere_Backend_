@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\BookOffer;
 use App\Models\ExchangeHistory;
 use App\Models\Genre;
@@ -263,8 +264,9 @@ class BookOfferController extends Controller
     {        
         $validatedData = $request->validate([
             'publisher_name' => 'required|string|max:255',
-            'genre_id' => 'required|integer|max:255',
+            'genre_id' => 'required|integer|max:255|exists:genres,genre_id',
             'title' => 'required|string|max:255',
+            'authors' => 'required|string|max:255',
             'language' => 'required|string|max:255',
             'quality' => 'required|integer|max:255',
             'publication_year' => 'required|integer|min:1700|max:' . date('Y'),
@@ -279,18 +281,20 @@ class BookOfferController extends Controller
         $publisher = Publisher::firstOrCreate([
             'publisher_name' => $validatedData['publisher_name']
         ]);
-        
         $publisherId = $publisher->publisher_id;
 
-        $genre = Genre::where('genre_id', $validatedData['genre_id'])->first();
-        if (!$genre) {
-            return response()->json(['hiba' => 'Műfaj nem található'], 400);
-        }
-
-        $work = Work::updateOrCreate(
+        $work = Work::firstOrCreate(
             ['title' => $validatedData['title']],
-            ['title' => $validatedData['title'], 'genre_id' => $genre->genre_id]
+            ['genre_id' => $validatedData['genre_id']]
         );
+        $authors = array_map('trim', explode(',', $validatedData['authors']));
+        $authorIds = [];
+        foreach ($authors as $authorName) {
+            if ($authorName === '') continue; // véd a ", "-től
+            $author = Author::firstOrCreate(['author_name' => $authorName]);
+            $authorIds[] = $author->author_id;
+        }
+        $work->authors()->sync($authorIds);
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -300,8 +304,8 @@ class BookOfferController extends Controller
         }
 
         $bookOffer->update([
-            'publisher_id' => $publisherId,
-            'work_id' => $work->id,
+            'publisher' => $publisherId,
+            'work' => $work->work_id,
             'language' => $validatedData['language'],
             'quality' => $validatedData['quality'],
             'publication_year' => $validatedData['publication_year'],

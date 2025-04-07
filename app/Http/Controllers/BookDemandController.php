@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\BookDemand;
 use App\Models\Genre;
 use App\Models\Publisher;
@@ -11,6 +12,37 @@ use Illuminate\Support\Facades\DB;
 
 class BookDemandController extends Controller
 {
+    public function store(Request $request){
+        $validatedData = $request->validate([
+            'user' => 'required|integer|exists:users,id',
+            'publisher_name' => 'string|max:255',
+            'title' => 'required|string|max:255',
+            'genre_id' => 'exists:genres,genre_id',
+            'language' => 'string|max:255',
+            'min_publication_year' => 'nullable|integer|min:1700',
+            'max_publication_year' => 'nullable|integer|max:' . date('Y'),
+        ]);
+
+        $publisher = Publisher::firstOrCreate(
+            ['publisher_name' => $validatedData["publisher_name"]]
+        );
+
+        $work = Work::firstOrCreate([
+            'title' => $validatedData['title'],
+            'genre_id' => $validatedData['genre_id'],
+        ]);
+
+        $bookDemand = BookDemand::create([
+            'publisher' => $publisher->publisher_id,
+            'work' => $work->work_id,
+        ]);
+
+        return response()->json([
+            'message' => 'Könyv keresés sikeresen feltöltve!',
+            'data' => $bookDemand,
+        ], 201);
+    }
+
     public function bookDemandsWithUsers()
        {
            $users = DB::table('book_demands')
@@ -40,7 +72,14 @@ class BookDemandController extends Controller
 
        public function getUserBookDemandInfo($user_id){
         $book_info = DB::select("
-            SELECT bd.demand_id, u.name, p.publisher_name, w.title, g.genre_name, language, min_publication_year, max_publication_year, demand_status, bd.created_at, bd.updated_at
+            SELECT bd.demand_id, u.name, p.publisher_name, w.title, g.genre_name, 
+                (
+                    SELECT GROUP_CONCAT(a.author_name SEPARATOR ', ')
+                    FROM written_bies wb
+                    INNER JOIN authors a ON a.author_id = wb.author
+                    WHERE wb.work = w.work_id
+                ) AS authors,
+                language, min_publication_year, max_publication_year, demand_status, bd.created_at, bd.updated_at
             FROM book_demands bd
                 INNER JOIN users u on u.id = bd.user
                 LEFT JOIN publishers p on p.publisher_id = bd.publisher
@@ -57,42 +96,46 @@ class BookDemandController extends Controller
         $validatedData = $request->validate([
             'publisher_name' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
+            'genre_id' => 'required|integer|max:255|exists:genres,genre_id',
+            'authors' => 'nullable|string|max:255', // written by-n keresztul
             'language' => 'nullable|string|max:255',
-            'genre_id' => 'nullable|integer|max:255',
-            'min_publication_year' => 'nullable|integer|min:1700',
-            'max_publication_year' => 'nullable|integer|min:1700'
+            'min_publication_year' => 'required|integer|min:1700',
+            'max_publication_year' => 'required|integer|max:' . date('Y')
         ]);
 
-        $publisherId = null;
-        if ($validatedData['publisher_name']) { // Ell. hogy van-e megadott kiadó név
-            $publisher = Publisher::where('publisher_name', $validatedData['publisher_name'])->first();
-        if (!$publisher) {
-            $publisher = Publisher::create(['publisher_name' => $validatedData['publisher_name']]);
-        }
-        $publisherId = $publisher->publisher_id;
-        }
+        $publisher = Publisher::firstOrCreate(
+            ['publisher_name' => $validatedData["publisher_name"]]
+        );
 
         $genre = Genre::where('genre_id', $validatedData['genre_id'])->first();
         if (!$genre) {
             return response()->json(['hiba' => 'Műfaj nem található'], 400);
         }
         
-        $work = Work::firstOrCreate(
-            ['title' => $validatedData['title']],
-            ['title' => $validatedData['title'], 'genre_id' => $genre->genre_id]
-        );
+        $work = Work::firstOrCreate([
+            'title' => $validatedData['title'],
+            'genre_id' => $validatedData['genre_id'],
+        ]);
+        $authors = array_map('trim', explode(',', $validatedData['authors']));
+        $authorIds = [];
+        foreach ($authors as $authorName) {
+            if ($authorName === '') continue; // véd a ", "-től
+            $author = Author::firstOrCreate(['author_name' => $authorName]);
+            $authorIds[] = $author->author_id;
+        }
+        $work->authors()->sync($authorIds); // replacelunk, nem csak addolunk
+        // szerzőt a műhöz csatoljuk
+        // syncWD: duplikálást elkerülve megtartja az előző szerzőket - kell hozzá belongstomany a modelben
 
         $bookDemand = BookDemand::where('demand_id', $id)->first();
-
         if (!$bookDemand) {
             return response()->json(['hiba' => 'Keresés nem található'], 404);
         }
 
         $bookDemand->update([
-            'publisher_id' => $publisherId, 
-            'title' => $work->title,  
-            'language' => $validatedData['language'],
-            'genre_id' => $work->genre_id,          
+            'publisher' => $publisher->publisher_id, 
+            'work' => $work->work_id, 
+            'language' => $validatedData['language'],       
             'min_publication_year' => $validatedData['min_publication_year'],
             'max_publication_year' => $validatedData['max_publication_year']
         ]);

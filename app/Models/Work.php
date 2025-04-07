@@ -23,4 +23,12 @@ class Work extends Model
     {
         return $this->belongsTo(Genre::class, 'genre_id');
     }
+    public function writtenBy()
+    {
+        return $this->belongsTo(WrittenBy::class, 'work');
+    }
+    public function authors()
+    {   //több a többhöz kapcsolat leírására
+        return $this->belongsToMany(Author::class, 'written_bies', 'work', 'author');
+    }
 }

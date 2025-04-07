@@ -71,8 +71,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
-
-
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
     Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
     Route::get('/users', [UserController::class, 'index']); // all users
