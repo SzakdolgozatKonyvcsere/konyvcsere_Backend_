@@ -112,11 +112,10 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        $statuses = [
-            'demand_status' => ['e', 'k', 't'], //elcserélve, keres, talált
-            'book_status' => ['e', 'f', 's'], //elcserélt, foglalt, szabad
-            'exchange_status' => ['a', 'k', 'f', 'v'] // kezdeményezés, folyamatban, átadva/visszautasítva
-            
+        $statuses = [ // x = archiválva
+            'demand_status' => ['e', 'k', 't', 'x'], //elcserélve, keres, talált
+            'book_status' => ['e', 'f', 's', 'x'], //elcserélt, foglalt, szabad
+            'exchange_status' => ['a', 'k', 'f', 'v', 'x'] // kezdeményezés, folyamatban, átadva/visszautasítva         
         ];
         
         foreach ($statuses as $type => $values) {

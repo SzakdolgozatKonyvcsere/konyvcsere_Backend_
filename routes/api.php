@@ -9,6 +9,7 @@ use App\Http\Controllers\WorkController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
+use App\Models\BookDemand;
 use App\Models\BookOffer;
 
 use function Pest\Laravel\post;
@@ -69,6 +70,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/book-demands/{id}/user-update', [BookDemandController::class, 'userUpdate']);
     Route::put('/book-offers/{id}/user-update', [BookOfferController::class, 'userUpdate']);
 
+    Route::patch("/soft-delete/book-demand", [BookDemandController::class, "softDelete"]);
+    Route::patch("/soft-delete/book-offer", [BookOfferController::class, "softDelete"]);
+    Route::patch("/soft-delete/exchange", [ExchangeHistoryController::class, "softDelete"]);
 });
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
@@ -77,8 +81,5 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
 });
 
 Route::get('/new-book-offers', [BookOfferController::class, 'newBookOffers']); // vendegeknek kezdolapra
-
-
-
 
 

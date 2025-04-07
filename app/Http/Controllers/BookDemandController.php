@@ -7,6 +7,7 @@ use App\Models\BookDemand;
 use App\Models\Genre;
 use App\Models\Publisher;
 use App\Models\Work;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -141,5 +142,14 @@ class BookDemandController extends Controller
         ]);
         
         return response()->json(['message' => 'Sikeresen frissítve', 'data' => $bookDemand], 200);
+    }
+
+    public function softDelete($id) {
+        $record = BookDemand::find($id);
+
+        $record->demand_status = 'x';
+        $record->save();
+
+        return response()->json(['message' => 'Sikeres törlés (soft delete).'], 200);
     }
 }

@@ -165,5 +165,12 @@ class ExchangeHistoryController extends Controller
         ], 200);
     }
 
+    public function softDelete($id) {
+        $record = ExchangeHistory::find($id);
 
+        $record->exchange_status = 'x';
+        $record->save();
+
+        return response()->json(['message' => 'Sikeres törlés (soft delete).'], 200);
+    }
 }

@@ -29,7 +29,6 @@ class Book_OffersTableSeeder extends Seeder
                 'quality' => 5,
                 'book_status' => 's',
                 'img_url' => 'books_pictures/LegyJoMindhalaligMoricz.jpg' // Kép elérési útja
-
             ],
             [
                 'user' => User::where('id', 2)->value('id'),
