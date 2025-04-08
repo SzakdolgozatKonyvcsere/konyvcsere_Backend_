@@ -321,6 +321,7 @@ class BookOfferController extends Controller
         ->join('publishers', 'book_offers.publisher', '=', 'publishers.publisher_id')
         ->join('written_bies', 'works.work_id', '=', 'written_bies.work')
         ->join('authors', 'written_bies.author', '=', 'authors.author_id')
+        ->where('book_offers.book_status', '!=', 'x')
         ->orderBy('book_offers.created_at', 'desc')
         ->take(3)
         ->select(
@@ -339,7 +340,7 @@ class BookOfferController extends Controller
         ->get()
         ->map(function ($book) {
             // Ha van kép, akkor teljes URL-t adunk vissza
-            $book->img_url = $book->img_url ? url($book->img_url) : url('/basic_book.png');
+            $book->img_url = $book->img_url ? url($book->img_url) : url('/books_pictures/basic_book.png');
     
             // Ha a `created_at` null, akkor ne próbáljuk formázni
             $book->created_at = $book->created_at ? \Carbon\Carbon::parse($book->created_at)->format('Y-m-d H:i:s') : null;

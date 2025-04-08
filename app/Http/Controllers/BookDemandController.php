@@ -7,7 +7,6 @@ use App\Models\BookDemand;
 use App\Models\Genre;
 use App\Models\Publisher;
 use App\Models\Work;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,12 +15,13 @@ class BookDemandController extends Controller
     public function store(Request $request){
         $validatedData = $request->validate([
             'user' => 'required|integer|exists:users,id',
-            'publisher_name' => 'string|max:255',
+            'publisher_name' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
             'genre_id' => 'exists:genres,genre_id',
-            'language' => 'string|max:255',
-            'min_publication_year' => 'nullable|integer|min:1700',
-            'max_publication_year' => 'nullable|integer|max:' . date('Y'),
+            'authors' => 'nullable|string|max:255',
+            'language' => 'nullable|string|max:255',
+            'min_publication_year' => 'required|integer|min:1700',
+            'max_publication_year' => 'required|integer|max:' . date('Y'),
         ]);
 
         $publisher = Publisher::firstOrCreate(
@@ -32,10 +32,22 @@ class BookDemandController extends Controller
             'title' => $validatedData['title'],
             'genre_id' => $validatedData['genre_id'],
         ]);
+        $authors = array_map('trim', explode(',', $validatedData['authors']));
+        $authorIds = [];
+        foreach ($authors as $authorName) {
+            if ($authorName === '') continue; // véd a ", "-től
+            $author = Author::firstOrCreate(['author_name' => $authorName]);
+            $authorIds[] = $author->author_id;
+        }
+        $work->authors()->sync($authorIds);
 
         $bookDemand = BookDemand::create([
+            'user' => $validatedData['user'],
             'publisher' => $publisher->publisher_id,
             'work' => $work->work_id,
+            'language' => $validatedData['language'],       
+            'min_publication_year' => $validatedData['min_publication_year'],
+            'max_publication_year' => $validatedData['max_publication_year']
         ]);
 
         return response()->json([

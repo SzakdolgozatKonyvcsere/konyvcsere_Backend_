@@ -9,9 +9,6 @@ use App\Http\Controllers\WorkController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Admin;
-use App\Models\BookDemand;
-use App\Models\BookOffer;
-
 use function Pest\Laravel\post;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -24,7 +21,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/genres', [GenreController::class, 'index']);
 
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']); //KONYVFELTOLTES
-    
+    Route::post('/keresesfeltoltes', [BookDemandController::class, 'store']);
+
     Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']);  
     Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
     Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
@@ -36,8 +34,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::patch('/user/exchange/{exchange_id}/accept', [ExchangeHistoryController::class, 'patchAcceptExchange']); // cserefolyamat
     Route::patch('/user/exchange/{exchange_id}/select-book', [ExchangeHistoryController::class, 'patchExchangeSelectOfferedBook']); //cserefolyamat
-
-
 // Kintrol behozva:
 
     //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info
@@ -59,7 +55,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
     Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
     Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
-
 
     Route::get('/user/{user_id}/profile-info', [UserController::class, "getUserProfileInfo"]);
 
