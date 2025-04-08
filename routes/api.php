@@ -70,9 +70,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/book-demands/{id}/user-update', [BookDemandController::class, 'userUpdate']);
     Route::put('/book-offers/{id}/user-update', [BookOfferController::class, 'userUpdate']);
 
-    Route::patch("/soft-delete/book-demand", [BookDemandController::class, "softDelete"]);
-    Route::patch("/soft-delete/book-offer", [BookOfferController::class, "softDelete"]);
-    Route::patch("/soft-delete/exchange", [ExchangeHistoryController::class, "softDelete"]);
+    Route::patch("/soft-delete/{id}/book-demand", [BookDemandController::class, "softDelete"]);
+    Route::patch("/soft-delete/{id}/book-offer", [BookOfferController::class, "softDelete"]);
+    Route::patch("/soft-delete/{id}/exchange", [ExchangeHistoryController::class, "softDelete"]);
 });
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {

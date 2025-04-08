@@ -397,7 +397,7 @@ class BookOfferController extends Controller
     public function softDelete($id) {
         $record = BookOffer::find($id);
 
-        $record->offer_status = 'x';
+        $record->book_status = 'x';
         $record->save();
 
         return response()->json(['message' => 'Sikeres törlés (soft delete).'], 200);
