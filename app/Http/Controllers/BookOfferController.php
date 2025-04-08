@@ -254,7 +254,8 @@ class BookOfferController extends Controller
                 LEFT JOIN publishers p on p.publisher_id = bo.publisher
                 LEFT JOIN works w on w.work_id = bo.work
                 LEFT JOIN genres g on g.genre_id = w.genre_id
-            WHERE bo.user = $user_id
+            WHERE bo.user = $user_id AND bo.book_status != 'x'
+            ORDER BY bo.book_status ASC
         ");
 
         return response()->json($book_info);
@@ -283,10 +284,10 @@ class BookOfferController extends Controller
         ]);
         $publisherId = $publisher->publisher_id;
 
-        $work = Work::firstOrCreate(
-            ['title' => $validatedData['title']],
-            ['genre_id' => $validatedData['genre_id']]
-        );
+        $work = Work::firstOrCreate([
+            'title' => $validatedData['title'],
+            'genre_id' => $validatedData['genre_id']
+        ]);
         $authors = array_map('trim', explode(',', $validatedData['authors']));
         $authorIds = [];
         foreach ($authors as $authorName) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\BookDemand;
+use App\Models\Dictionary;
 use App\Models\Genre;
 use App\Models\Publisher;
 use App\Models\Work;
@@ -41,13 +42,18 @@ class BookDemandController extends Controller
         }
         $work->authors()->sync($authorIds);
 
+        $status = Dictionary::where('type', 'demand_status')
+            ->where('value', 'k')
+            ->first();
+
         $bookDemand = BookDemand::create([
             'user' => $validatedData['user'],
             'publisher' => $publisher->publisher_id,
             'work' => $work->work_id,
             'language' => $validatedData['language'],       
             'min_publication_year' => $validatedData['min_publication_year'],
-            'max_publication_year' => $validatedData['max_publication_year']
+            'max_publication_year' => $validatedData['max_publication_year'],
+            'demand_status' => $status->value
         ]);
 
         return response()->json([
@@ -98,7 +104,8 @@ class BookDemandController extends Controller
                 LEFT JOIN publishers p on p.publisher_id = bd.publisher
                 LEFT JOIN works w on w.work_id = bd.work
                 LEFT JOIN genres g on g.genre_id = w.genre_id
-            WHERE bd.user = $user_id
+            WHERE bd.user = $user_id AND bd.demand_status != 'x'
+            ORDER BY bd.demand_status DESC
         ");
             
         return response()->json($book_info);
