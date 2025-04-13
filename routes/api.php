@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']); //KONYVFELTOLTES
     Route::post('/keresesfeltoltes', [BookDemandController::class, 'store']);
 
-    Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']);  
+    Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']); // cserefolyamat 0 -kezdeményezés, könyv f
     Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
     Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
     Route::get('user/{id}/book-offers', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
@@ -32,8 +32,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user/{id}/my-exchanges', [ExchangeHistoryController::class, 'givenUsersInExchanges']);
     Route::get('/user/{id}/book-by-id', [BookOfferController::class, 'getThatBookOfferForExchange']);
 
-    Route::patch('/user/exchange/{exchange_id}/accept', [ExchangeHistoryController::class, 'patchAcceptExchange']); // cserefolyamat
-    Route::patch('/user/exchange/{exchange_id}/select-book', [ExchangeHistoryController::class, 'patchExchangeSelectOfferedBook']); //cserefolyamat
+    Route::patch('/user/exchange/{exchange_id}/accept', [ExchangeHistoryController::class, 'patchAcceptExchange']); // cserefolyamat 1 -folyamatban
+    Route::patch('/user/exchange/{exchange_id}/select-book', [ExchangeHistoryController::class, 'patchExchangeSelectOfferedBook']); //cserefolyamat 2 -kiválaszt, másik könyv f
+    Route::patch('/user/exchange/{exchange_id}/acceptfinal', [ExchangeHistoryController::class, 'patchAcceptExchangeFinal']); // cserefolyamat 3 -elfogad, véglegesít (a), könyvek e
+    Route::patch('/user/exchange/{exchange_id}/reject', [ExchangeHistoryController::class, 'patchRejectExchange']); // cserefolyamat 4 -visszautasít (v), könyvek s
+    
+
 // Kintrol behozva:
 
     //Route::get('/user-bookinfo/{id}', [UserController::class, 'getBookInfo']); //Given book's info

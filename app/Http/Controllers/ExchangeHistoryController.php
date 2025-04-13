@@ -75,13 +75,14 @@ class ExchangeHistoryController extends Controller
                 'desired_book.user as desired_book_owner_id',
                 'exchange_histories.desired_item as desired_book_id',
                 'exchange_histories.offered_item as offered_book_id',
-                'exchange_histories.exchange_status'
+                'exchange_histories.exchange_status',
+                'exchange_histories.updated_at'
             )
             ->get();
 
         return response()->json($exchanges);
     }
-
+    //1.elfogadás
     public function patchAcceptExchange($exchange_id)
     {
          // Ellenőrizzük, hogy az ID nem NULL-e
@@ -141,7 +142,7 @@ class ExchangeHistoryController extends Controller
     }  */
 
      
-  
+  //másik könyv kiválasztás
     public function patchExchangeSelectOfferedBook(Request $request, $exchange_id)
     {
         $request->validate([
@@ -159,11 +160,86 @@ class ExchangeHistoryController extends Controller
             'offered_item' => $request->offered_item
         ]);
 
+        DB::table('book_offers')
+        ->where('offer_id', $exchange->offered_item) // vagy request->
+        ->update(['book_status' => 'f']);
+
+
         return response()->json([
             'message' => 'Offered book selected successfully! 2',
             'exchange' => $exchange
         ], 200);
     }
+
+    //2.elfogadás, teljes befejezés (a) + könyvek elcseréltek:
+    public function patchAcceptExchangeFinal($exchange_id)
+    {
+         // Ellenőrizzük, hogy az ID nem NULL-e
+        if (!$exchange_id) {
+            return response()->json(['message' => 'Exchange ID is missing'], 400);
+        }
+        // Ellenőrizzük, hogy a csere létezik-e
+        $exchange = ExchangeHistory::where('exchange_id', $exchange_id)->first();
+
+        if (!$exchange) {
+            return response()->json(['message' => 'Exchange not found'], 404);
+        }
+        // Csere állapot frissítése "folyamatban" státuszra
+        $exchange->update([
+            'exchange_status' => 'a'
+        ]);
+
+        // A könyvEK státuszát itt frissítjük "f"-re
+        DB::table('book_offers')
+        ->where('offer_id', $exchange->desired_item)
+        ->update(['book_status' => 'e']);
+
+        DB::table('book_offers')
+        ->where('offer_id', $exchange->offered_item)
+        ->update(['book_status' => 'e']);
+
+        return response()->json([
+            'message' => 'Exchange and book status completed successfully (a + e)!',
+            'exchange' => $exchange
+        ], 200);
+    }
+
+
+
+    //teljes visszautasítás (v) + könyvek szabadak
+    public function patchRejectExchange($exchange_id)
+    {
+         // Ellenőrizzük, hogy az ID nem NULL-e
+        if (!$exchange_id) {
+            return response()->json(['message' => 'Exchange ID is missing'], 400);
+        }
+        // Ellenőrizzük, hogy a csere létezik-e
+        $exchange = ExchangeHistory::where('exchange_id', $exchange_id)->first();
+
+        if (!$exchange) {
+            return response()->json(['message' => 'Exchange not found'], 404);
+        }
+        // Csere állapot frissítése "visszautasítva" státuszra
+        $exchange->update([
+            'exchange_status' => 'v'
+        ]);
+
+        // A könyv státuszát itt frissítjük "s"-re
+        DB::table('book_offers')
+        ->where('offer_id', $exchange->desired_item)
+        ->update(['book_status' => 's']);
+
+        if($exchange->offered_item !== null){
+            DB::table('book_offers')
+        ->where('offer_id', $exchange->offered_item)
+        ->update(['book_status' => 's']);
+        }
+
+        return response()->json([
+            'message' => 'Exchange and book status rejected successfully (v + s + s)!',
+            'exchange' => $exchange
+        ], 200);
+    } 
 
     public function softDelete($id) {
         $record = ExchangeHistory::find($id);
