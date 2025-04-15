@@ -1,4 +1,3 @@
-<!-- resources/views/emails/contact.blade.php -->
 <!DOCTYPE html>
 <html lang="hu">
 <head>

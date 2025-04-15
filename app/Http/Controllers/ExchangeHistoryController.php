@@ -8,21 +8,25 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ExchangePartnerMail;
+use App\Models\User;
 
 class ExchangeHistoryController extends Controller
 {
     //
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'interested_user' => 'required|exists:users,id',
             'desired_item' => 'required|exists:book_offers,offer_id',
-            'exchange_status' => 'required|in:a,k,f,v' 
+            'exchange_status' => 'required|in:a,k,f,v'
         ]);
 
         // Ellenőrizzük, hogy a kívánt könyv státusza "f"-e (nem elérhető)
         $book = DB::table('book_offers')
-        ->where('offer_id', $request->desired_item)
-        ->first();
+            ->where('offer_id', $request->desired_item)
+            ->first();
 
         if ($book && $book->book_status === 'f') {
             return response()->json(['message' => 'Ez a könyv már nem elérhető a cserére.'], 400);
@@ -85,7 +89,7 @@ class ExchangeHistoryController extends Controller
     //1.elfogadás
     public function patchAcceptExchange($exchange_id)
     {
-         // Ellenőrizzük, hogy az ID nem NULL-e
+        // Ellenőrizzük, hogy az ID nem NULL-e
         if (!$exchange_id) {
             return response()->json(['message' => 'Exchange ID is missing'], 400);
         }
@@ -102,16 +106,16 @@ class ExchangeHistoryController extends Controller
 
         // A könyv státuszát itt frissítjük "f"-re
         DB::table('book_offers')
-        ->where('offer_id', $exchange->desired_item)
-        ->update(['book_status' => 'f']);
+            ->where('offer_id', $exchange->desired_item)
+            ->update(['book_status' => 'f']);
 
         return response()->json([
             'message' => 'Exchange and book status accepted successfully to f!',
             'exchange' => $exchange
         ], 200);
-    } 
+    }
 
-      // EZ A JO no1.
+    // EZ A JO no1.
     /* public function patchAcceptExchange($exchange_id)
     {
          // Ellenőrizzük, hogy az ID nem NULL-e
@@ -141,8 +145,8 @@ class ExchangeHistoryController extends Controller
         ], 200);
     }  */
 
-     
-  //másik könyv kiválasztás
+
+    //másik könyv kiválasztás
     public function patchExchangeSelectOfferedBook(Request $request, $exchange_id)
     {
         $request->validate([
@@ -161,8 +165,8 @@ class ExchangeHistoryController extends Controller
         ]);
 
         DB::table('book_offers')
-        ->where('offer_id', $exchange->offered_item) // vagy request->
-        ->update(['book_status' => 'f']);
+            ->where('offer_id', $exchange->offered_item) // vagy request->
+            ->update(['book_status' => 'f']);
 
 
         return response()->json([
@@ -174,7 +178,7 @@ class ExchangeHistoryController extends Controller
     //2.elfogadás, teljes befejezés (a) + könyvek elcseréltek:
     public function patchAcceptExchangeFinal($exchange_id)
     {
-         // Ellenőrizzük, hogy az ID nem NULL-e
+        // Ellenőrizzük, hogy az ID nem NULL-e
         if (!$exchange_id) {
             return response()->json(['message' => 'Exchange ID is missing'], 400);
         }
@@ -191,25 +195,54 @@ class ExchangeHistoryController extends Controller
 
         // A könyvEK státuszát itt frissítjük "f"-re
         DB::table('book_offers')
-        ->where('offer_id', $exchange->desired_item)
-        ->update(['book_status' => 'e']);
+            ->where('offer_id', $exchange->desired_item)
+            ->update(['book_status' => 'e']);
 
         DB::table('book_offers')
-        ->where('offer_id', $exchange->offered_item)
-        ->update(['book_status' => 'e']);
+            ->where('offer_id', $exchange->offered_item)
+            ->update(['book_status' => 'e']);
 
+        //Email küldés
+        //Lekérjük az érdeklődő felhasználót
+        $interestedUser = User::find($exchange->interested_user);
+
+
+        // Lekérjük a könyv tulajdonosát
+        $ownerUser = DB::table('book_offers')
+            ->join('users', 'book_offers.user', '=', 'users.id')
+            ->where('book_offers.offer_id', $exchange->desired_item)
+            ->select('users.name', 'users.email', 'users.tel')
+            ->first();
+
+        // Küldünk e-mailt az érdeklődő felhasználónak
+        if ($interestedUser && $ownerUser) {
+            Mail::to($interestedUser->email)->send(new ExchangePartnerMail([
+                'partner_name' => $ownerUser->name,
+                'partner_email' => $ownerUser->email,
+                'partner_tel' => $ownerUser->tel,
+            ]));
+        }
+        // Küldünk e-mailt a könyv tulajdonosának
+        if ($ownerUser && $interestedUser) {
+            Mail::to($ownerUser->email)->send(new ExchangePartnerMail([
+                'partner_name' => $interestedUser->name,
+                'partner_email' => $interestedUser->email,
+                'partner_tel' => $interestedUser->tel,
+            ]));
+        }
+    
         return response()->json([
             'message' => 'Exchange and book status completed successfully (a + e)!',
             'exchange' => $exchange
         ], 200);
+
+
     }
-
-
 
     //teljes visszautasítás (v) + könyvek szabadak
     public function patchRejectExchange($exchange_id)
     {
-         // Ellenőrizzük, hogy az ID nem NULL-e
+        // Ellenőrizzük, hogy az ID nem NULL-e
         if (!$exchange_id) {
             return response()->json(['message' => 'Exchange ID is missing'], 400);
         }
@@ -226,22 +259,23 @@ class ExchangeHistoryController extends Controller
 
         // A könyv státuszát itt frissítjük "s"-re
         DB::table('book_offers')
-        ->where('offer_id', $exchange->desired_item)
-        ->update(['book_status' => 's']);
+            ->where('offer_id', $exchange->desired_item)
+            ->update(['book_status' => 's']);
 
-        if($exchange->offered_item !== null){
+        if ($exchange->offered_item !== null) {
             DB::table('book_offers')
-        ->where('offer_id', $exchange->offered_item)
-        ->update(['book_status' => 's']);
+                ->where('offer_id', $exchange->offered_item)
+                ->update(['book_status' => 's']);
         }
 
         return response()->json([
             'message' => 'Exchange and book status rejected successfully (v + s + s)!',
             'exchange' => $exchange
         ], 200);
-    } 
+    }
 
-    public function softDelete($id) {
+    public function softDelete($id)
+    {
         $record = ExchangeHistory::find($id);
 
         $record->exchange_status = 'x';
