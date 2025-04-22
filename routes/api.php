@@ -23,19 +23,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']); //KONYVFELTOLTES
     Route::post('/keresesfeltoltes', [BookDemandController::class, 'store']);
 
-    Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']); // cserefolyamat 0 -kezdeményezés, könyv f
+    Route::post('/exchange-request', [ExchangeHistoryController::class, 'store']); //E // cserefolyamat 0 -kezdeményezés, könyv f
     Route::get('/user/{id}', [UserController::class, 'show']); //retrieves a single user
     Route::get('/all-available-books', [BookOfferController::class, 'getAllBookOffersAvailable']);
     Route::get('user/{id}/book-offers', [BookOfferController::class, 'getBookOffersByUser']); //Given user's book offers
     Route::get('/user/{id}/showinfo', [UserController::class, 'getGivenUserProfileExchangeInfo']); 
     Route::get('/user/{id}/most-exchanged-genre', [UserController::class, 'getGivenUserMostExchangedGenre']);
-    Route::get('/user/{id}/my-exchanges', [ExchangeHistoryController::class, 'givenUsersInExchanges']);
-    Route::get('/user/{id}/book-by-id', [BookOfferController::class, 'getThatBookOfferForExchange']);
+    Route::get('/user/{id}/my-exchanges', [ExchangeHistoryController::class, 'givenUsersInExchanges']); //E
+    Route::get('/user/{id}/book-by-id', [BookOfferController::class, 'getThatBookOfferForExchange']); //E
 
-    Route::patch('/user/exchange/{exchange_id}/accept', [ExchangeHistoryController::class, 'patchAcceptExchange']); // cserefolyamat 1 -folyamatban
-    Route::patch('/user/exchange/{exchange_id}/select-book', [ExchangeHistoryController::class, 'patchExchangeSelectOfferedBook']); //cserefolyamat 2 -kiválaszt, másik könyv f
-    Route::patch('/user/exchange/{exchange_id}/acceptfinal', [ExchangeHistoryController::class, 'patchAcceptExchangeFinal']); // cserefolyamat 3 -elfogad, véglegesít (a), könyvek e
-    Route::patch('/user/exchange/{exchange_id}/reject', [ExchangeHistoryController::class, 'patchRejectExchange']); // cserefolyamat 4 -visszautasít (v), könyvek s
+    Route::patch('/user/exchange/{exchange_id}/accept', [ExchangeHistoryController::class, 'patchAcceptExchange']); //E // cserefolyamat 1 -folyamatban
+    Route::patch('/user/exchange/{exchange_id}/select-book', [ExchangeHistoryController::class, 'patchExchangeSelectOfferedBook']); //E //cserefolyamat 2 -kiválaszt, másik könyv f
+    Route::patch('/user/exchange/{exchange_id}/acceptfinal', [ExchangeHistoryController::class, 'patchAcceptExchangeFinal']); //E // cserefolyamat 3 -elfogad, véglegesít (a), könyvek e
+    Route::patch('/user/exchange/{exchange_id}/reject', [ExchangeHistoryController::class, 'patchRejectExchange']); //E // cserefolyamat 4 -visszautasít (v), könyvek s
     
 
 // Kintrol behozva:
