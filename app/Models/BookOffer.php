@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\BookOfferObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
+#[ObservedBy([BookOfferObserver::class])]
 class BookOffer extends Model
 {
     /** @use HasFactory<\Database\Factories\BookOfferFactory> */
@@ -32,5 +35,17 @@ class BookOffer extends Model
     public function publisher()
     {
         return $this->belongsTo(Publisher::class, 'publisher_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id');
+    }
+    public function publisherModel()
+    {
+        return $this->belongsTo(Publisher::class, 'publisher', 'publisher_id');
+    }
+    public function workModel()
+    {
+        return $this->belongsTo(Work::class, 'work', 'work_id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\BookDemand;
+use App\Models\BookOffer;
 use App\Models\Dictionary;
 use App\Models\Genre;
 use App\Models\Publisher;
@@ -170,5 +171,94 @@ class BookDemandController extends Controller
         $record->save();
 
         return response()->json(['message' => 'Sikeres törlés (soft delete).'], 200);
+    }
+
+    // kereslet-kinalat egyeztetes:
+    
+    // visszaadja az aktuális user összes mentett keresését a hozzájuk tartozó offer‑ekkel
+    public function index(Request $req)
+    {
+        $userId = $req->user()->id;
+
+        $demands = BookDemand::with(['workModel','publisherModel','workModel.authors'])
+            ->where('user', $userId)
+            ->get()
+            ->map(function($d) {
+                return [
+                    'demand_id'        => $d->demand_id,                        // itt adunk egy 'id' kulcsot
+                    'user'      => $d->user,                             // és egy 'user' mezőt
+                    'title'     => $d->workModel->title,
+                    'publisher' => $d->publisher,
+                    'work'      => $d->work,  
+                    'genre'     => $d->workModel->genre_id,
+                    'authors'   => $d->workModel->authors->pluck('author_name'),
+                    'language'  => $d->language,
+                    'min_publication_year'  => $d->min_publication_year,
+                    'max_publication_year'  => $d->max_publication_year,
+                    'demand_status'    => $d->demand_status,
+                    'created_at'           => optional($d->created_at)->toDateTimeString(),
+                'updated_at'           => optional($d->updated_at)->toDateTimeString(),
+
+                'work_model'           => [
+                    'work_id'    => $d->workModel?->work_id,
+                    'title'      => $d->workModel?->title,
+                    'genre_id'   => $d->workModel?->genre_id,
+                    'created_at' => optional($d->workModel?->created_at)->toDateTimeString(),
+                    'updated_at' => optional($d->workModel?->updated_at)->toDateTimeString(),
+                ],
+                ];
+            });
+
+        return response()->json($demands, 200);
+    }
+
+    // Lekéri egy konkrét kereséshez tartozó ajánlatokat
+    public function matches(Request $request, BookDemand $demand)
+    {
+        // feltételezve, hogy a BookDemandObserver már beállította a demand_status‑t
+        
+
+            $offers = BookOffer::query()
+        ->when($demand->publisher, fn($q) =>
+            $q->where('publisher', $demand->publisher)
+        )
+        ->when($demand->work, fn($q) =>
+            $q->where('work', $demand->work)
+        )
+        ->when($demand->language, fn($q) =>
+            $q->where('language', $demand->language)
+        )
+        ->when($demand->min_publication_year, fn($q) =>
+            $q->where('publication_year', '>=', $demand->min_publication_year)
+        )
+        ->when($demand->max_publication_year, fn($q) =>
+            $q->where('publication_year', '<=', $demand->max_publication_year)
+        )
+        ->when(optional($demand->workModel)->genre_id, fn($q) =>
+            $q->whereHas('workModel', fn($w) =>
+                $w->where('genre_id', $demand->workModel->genre_id)
+            )
+        )
+        ->when($demand->author, fn($q) =>
+            $q->whereHas('workModel.authors', fn($a) =>
+                $a->where('author_name', $demand->author)
+            )
+        )
+        ->get()
+        ->map(function($o) {
+            return [
+                'id'         => $o->offer_id,
+                'title'      => $o->workModel->title,
+                'publisher'  => $o->publisherModel->publisher_name,
+                'authors'    => $o->workModel->authors->pluck('author_name'),
+                'language'   => $o->language,
+                'year'       => $o->publication_year,
+                'quality'    => $o->quality,
+                'status'     => $o->book_status,
+                'image_url'  => $o->img_url,
+            ];
+        });
+
+        return response()->json($offers, 200);
     }
 }

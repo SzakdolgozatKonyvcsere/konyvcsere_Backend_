@@ -14,9 +14,9 @@ class DictionariesTableSeeder extends Seeder
     public function run(): void
     {
         $statuses = [
-            'demand_status' => ['e', 'k', 't'],
-            'book_status' => ['e', 'f', 's'],
-            'exchange_status' => ['a', 'k', 'f', 'v']
+            'demand_status' => ['e', 'k', 't', 'x'],
+            'book_status' => ['e', 'f', 's', 'x'],
+            'exchange_status' => ['a', 'k', 'f', 'v', 'x']
         ];
         
         foreach ($statuses as $type => $values) {
