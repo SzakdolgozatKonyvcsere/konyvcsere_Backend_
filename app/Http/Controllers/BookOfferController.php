@@ -324,7 +324,7 @@ class BookOfferController extends Controller
         ->join('authors', 'written_bies.author', '=', 'authors.author_id')
         ->where('book_offers.book_status', '!=', 'x')
         ->orderBy('book_offers.created_at', 'desc')
-        ->take(3)
+        ->take(4)
         ->select(
             'works.title',
             'publishers.publisher_name',
