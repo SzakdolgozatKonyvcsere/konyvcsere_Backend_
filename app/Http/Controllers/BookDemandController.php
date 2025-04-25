@@ -185,8 +185,8 @@ class BookDemandController extends Controller
             ->get()
             ->map(function($d) {
                 return [
-                    'demand_id'        => $d->demand_id,                        // itt adunk egy 'id' kulcsot
-                    'user'      => $d->user,                             // és egy 'user' mezőt
+                    'demand_id'        => $d->demand_id, // itt adunk egy 'id' kulcsot
+                    'user'      => $d->user, // és egy 'user' mezőt
                     'title'     => $d->workModel->title,
                     'publisher' => $d->publisher,
                     'work'      => $d->work,  
@@ -248,6 +248,7 @@ class BookDemandController extends Controller
         ->map(function($o) {
             return [
                 'id'         => $o->offer_id,
+                'user_id'    => $o->user,
                 'title'      => $o->workModel->title,
                 'publisher'  => $o->publisherModel->publisher_name,
                 'authors'    => $o->workModel->authors->pluck('author_name'),
