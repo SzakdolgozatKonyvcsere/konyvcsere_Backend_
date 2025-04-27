@@ -18,8 +18,9 @@ class WorkFactory extends Factory
     public function definition(): array
     {
         return [
-            'genre_id' => Genre::all()->random()->genre_id,
-            'title' =>fake()->sentence(2)
+            //'genre_id' => Genre::all()->random()->genre_id,
+            'genre_id' => Genre::factory(),
+            'title' =>$this->faker->unique()->sentence(2),
         ];
     }
 }
