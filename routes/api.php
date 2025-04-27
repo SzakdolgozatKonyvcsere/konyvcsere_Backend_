@@ -16,8 +16,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    
-   
     Route::get('/genres', [GenreController::class, 'index']);
 
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']); //KONYVFELTOLTES
