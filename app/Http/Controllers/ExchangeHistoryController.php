@@ -80,7 +80,8 @@ class ExchangeHistoryController extends Controller
                 'exchange_histories.desired_item as desired_book_id',
                 'exchange_histories.offered_item as offered_book_id',
                 'exchange_histories.exchange_status',
-                'exchange_histories.updated_at'
+                'exchange_histories.updated_at',
+                'exchange_histories.created_at'
             )
             ->get();
 
