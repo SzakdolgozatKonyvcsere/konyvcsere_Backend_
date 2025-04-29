@@ -35,6 +35,26 @@ class UserController extends Controller
 
         $user->update($validatedData);
     }
+
+    public function adminRoleChange(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found.'], 404);
+        }
+
+        $validated = $request->validate([
+            'role' => 'required|integer|in:0,1,2' // 0 = Admin, 1 = User, 2 = Inaktiv
+        ]);
+
+        $user->role = $validated['role'];
+        $user->save();
+
+        return response()->json(['message' => 'User role updated.']);
+    }
+
+
     
     public function getGivenUserProfileExchangeInfo($id){
          // Beállítjuk a Carbon nyelvét magyarra
@@ -133,9 +153,16 @@ class UserController extends Controller
 
 
     public function inactiveUsers()
-    {
-        
-        $inactiveUsers = User::where('online_status', 0)
+    {      
+        $inactiveUsers = User::where('role', 2) // role:2 = inaktiv felh
+            ->select('name', 'email', 'full_name', 'city')
+            ->get();
+
+        return response()->json($inactiveUsers);
+    }
+    public function offlineUsers()
+    {      
+        $inactiveUsers = User::where('online_status', 0) // offline felh
             ->select('name', 'email', 'full_name', 'city')
             ->get();
 

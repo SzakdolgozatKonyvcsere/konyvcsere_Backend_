@@ -80,6 +80,7 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
     // all users
     Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
     Route::get('/users', [UserController::class, 'index']);
+    Route::patch('/users/{id}/change-role', [UserController::class, "adminRoleChange"]);
 });
 
 
