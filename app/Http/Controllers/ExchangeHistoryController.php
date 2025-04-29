@@ -285,37 +285,43 @@ class ExchangeHistoryController extends Controller
 
     public function allExchangedBooksForAdmin()
     {
-        $exchanges = DB::table('exchange_histories as e')
-            ->join('book_offers as desired', 'e.desired_item', '=', 'desired.offer_id')
-            ->join('works as desired_work', 'desired.work', '=', 'desired_work.work_id')
-            ->join('users as desired_owner', 'desired.user', '=', 'desired_owner.id')
-
-            ->leftJoin('book_offers as offered', 'e.offered_item', '=', 'offered.offer_id')
-            ->leftJoin('works as offered_work', 'offered.work', '=', 'offered_work.work_id')
-            ->leftJoin('users as offered_owner', 'offered.user', '=', 'offered_owner.id')
-
-            ->where('e.exchange_status', 'a') // Csak a sikeres, befejezett cserék
-            ->select([
-                'e.exchange_id',
-                'e.created_at',
-
-                'desired.offer_id as desired_book_id',
-                'desired_work.title as desired_book_title',
-                'desired_owner.name as desired_owner_name',
-                'desired_owner.email as desired_owner_email',
-                'desired_owner.city as desired_owner_city',
-                'desired_owner.tel as desired_owner_tel',
-
-                'offered.offer_id as offered_book_id',
-                'offered_work.title as offered_book_title',
-                'offered_owner.name as offered_owner_name',
-                'offered_owner.email as offered_owner_email',
-                'offered_owner.city as offered_owner_city',
-                'offered_owner.tel as offered_owner_tel',
-            ])
-            ->orderByDesc('e.created_at')
-            ->get();
-
-        return response()->json($exchanges);
-    }
+            $exchanges = DB::table('exchange_histories as e')
+                ->join('users as requester', 'e.interested_user', '=', 'requester.id') // Érdeklődő
+                ->join('book_offers as desired', 'e.desired_item', '=', 'desired.offer_id')
+                ->join('works as desired_work', 'desired.work', '=', 'desired_work.work_id')
+                ->join('users as desired_owner', 'desired.user', '=', 'desired_owner.id')
+        
+                ->leftJoin('book_offers as offered', 'e.offered_item', '=', 'offered.offer_id')
+                ->leftJoin('works as offered_work', 'offered.work', '=', 'offered_work.work_id')
+                ->leftJoin('users as offered_owner', 'offered.user', '=', 'offered_owner.id')
+        
+                ->where('e.exchange_status', 'a')
+        
+                ->select([
+                    'e.exchange_id',
+                    'e.created_at',
+        
+                    // Érdeklődő
+                    'requester.name as requester_name',
+                    'requester.email as requester_email',
+        
+                    // Kért könyv + tulaj
+                    'desired_work.title as desired_book_title',
+                    'desired_owner.name as desired_owner_name',
+                    'desired_owner.email as desired_owner_email',
+                    'desired_owner.city as desired_owner_city',
+                    'desired_owner.tel as desired_owner_tel',
+        
+                    // Felajánlott könyv + tulaj
+                    'offered_work.title as offered_book_title',
+                    'offered_owner.name as offered_owner_name',
+                    'offered_owner.email as offered_owner_email',
+                    'offered_owner.city as offered_owner_city',
+                    'offered_owner.tel as offered_owner_tel',
+                ])
+                ->orderByDesc('e.created_at')
+                ->get();
+        
+            return response()->json($exchanges);
+        }
 }
