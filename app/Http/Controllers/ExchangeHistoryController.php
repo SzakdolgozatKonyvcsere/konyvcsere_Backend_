@@ -231,13 +231,11 @@ class ExchangeHistoryController extends Controller
                 'partner_tel' => $interestedUser->tel,
             ]));
         }
-    
+
         return response()->json([
             'message' => 'Exchange and book status completed successfully (a + e)!',
             'exchange' => $exchange
         ], 200);
-
-
     }
 
     //teljes visszautasítás (v) + könyvek szabadak
@@ -283,5 +281,41 @@ class ExchangeHistoryController extends Controller
         $record->save();
 
         return response()->json(['message' => 'Sikeres törlés (soft delete).'], 200);
+    }
+
+    public function allExchangedBooksForAdmin()
+    {
+        $exchanges = DB::table('exchange_histories as e')
+            ->join('book_offers as desired', 'e.desired_item', '=', 'desired.offer_id')
+            ->join('works as desired_work', 'desired.work', '=', 'desired_work.work_id')
+            ->join('users as desired_owner', 'desired.user', '=', 'desired_owner.id')
+
+            ->leftJoin('book_offers as offered', 'e.offered_item', '=', 'offered.offer_id')
+            ->leftJoin('works as offered_work', 'offered.work', '=', 'offered_work.work_id')
+            ->leftJoin('users as offered_owner', 'offered.user', '=', 'offered_owner.id')
+
+            ->where('e.exchange_status', 'a') // Csak a sikeres, befejezett cserék
+            ->select([
+                'e.exchange_id',
+                'e.created_at',
+
+                'desired.offer_id as desired_book_id',
+                'desired_work.title as desired_book_title',
+                'desired_owner.name as desired_owner_name',
+                'desired_owner.email as desired_owner_email',
+                'desired_owner.city as desired_owner_city',
+                'desired_owner.tel as desired_owner_tel',
+
+                'offered.offer_id as offered_book_id',
+                'offered_work.title as offered_book_title',
+                'offered_owner.name as offered_owner_name',
+                'offered_owner.email as offered_owner_email',
+                'offered_owner.city as offered_owner_city',
+                'offered_owner.tel as offered_owner_tel',
+            ])
+            ->orderByDesc('e.created_at')
+            ->get();
+
+        return response()->json($exchanges);
     }
 }

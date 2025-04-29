@@ -84,5 +84,6 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
 
 
 Route::get('/new-book-offers', [BookOfferController::class, 'newBookOffers']); // vendegeknek kezdolapra
+Route::get('/exchanged-books', [ExchangeHistoryController::class, 'allExchangedBooksForAdmin']); //összes cserefolyamat adminnak
 
 
