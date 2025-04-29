@@ -20,7 +20,21 @@ class UserController extends Controller
 
     function show($id){
         return User::find($id);
-    } 
+    }
+
+    function update(Request $request, $id) {
+        $validatedData = $request->validate([
+            "name" => "string|max:255|unique:users,name,$id",
+            "full_name" => "string|max:255|",
+            "email" => "string|max:255|unique:users,email,$id",
+            "city" => "string|max:255|",
+            "tel" => "string|max:255|unique:users,tel,$id"
+        ]);
+
+        $user = User::find($id);
+
+        $user->update($validatedData);
+    }
     
     public function getGivenUserProfileExchangeInfo($id){
          // Beállítjuk a Carbon nyelvét magyarra

@@ -16,8 +16,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    
-   
     Route::get('/genres', [GenreController::class, 'index']);
 
     Route::post('/konyvfeltoltes', [WorkController::class, 'store']); //KONYVFELTOLTES
@@ -68,7 +66,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user/{user_id}/book-offer-info', [BookOfferController::class, "getUserBookOfferInfo"]);
     Route::get('/user/{user_id}/book-demand-info', [BookDemandController::class, "getUserBookDemandInfo"]);
     Route::post('/user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
-    
+    Route::put('/user/{id}/update-info', [UserController::class, "update"]);
+
     Route::put('/book-demands/{id}/user-update', [BookDemandController::class, 'userUpdate']);
     Route::put('/book-offers/{id}/user-update', [BookOfferController::class, 'userUpdate']);
 
@@ -78,9 +77,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
+    // all users
     Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
-    Route::get('/users', [UserController::class, 'index']); // all users
+    Route::get('/users', [UserController::class, 'index']);
 });
+
 
 Route::get('/new-book-offers', [BookOfferController::class, 'newBookOffers']); // vendegeknek kezdolapra
 

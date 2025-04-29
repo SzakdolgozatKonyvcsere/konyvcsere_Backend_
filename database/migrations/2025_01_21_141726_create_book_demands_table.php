@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -22,6 +23,12 @@ return new class extends Migration
             $table->char('demand_status')->default('k'); //keres
             $table->timestamps();
         });
+
+        DB::statement("
+            ALTER TABLE book_demands
+            ADD CONSTRAINT chk_publication_year_order
+            CHECK (min_publication_year <= max_publication_year)
+        ");
     }
 
     /**

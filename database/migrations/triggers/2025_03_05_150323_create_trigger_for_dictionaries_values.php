@@ -22,7 +22,7 @@ return new class extends Migration
             end
         "); 
 
-       /*  DB::statement("
+        DB::statement("
             create trigger check_book_status_values before insert on book_offers
             for each row
             begin
@@ -30,7 +30,7 @@ return new class extends Migration
                     signal sqlstate '45000' set message_text = 'invalid book_status value';
                 end if;
             end
-        "); */
+        "); // 
 
         DB::statement("
             create trigger check_exchange_status_values before insert on exchange_histories

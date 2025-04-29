@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // Ez egy constraint lenne alapból
-        DB::statement("
+        /*DB::statement("
             CREATE TRIGGER check_book_search_release_date_insert
             BEFORE INSERT ON book_demands
             FOR EACH ROW
@@ -33,7 +33,9 @@ return new class extends Migration
                     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Hiba! A minimum kiadási év nem lehet nagyobb a maximum kiadási évnél!';
                 END IF;
             END;
-        "); 
+        "); */
+        
+        // Check constraintre javitva
     }
 
 
@@ -42,6 +44,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement(query: 'DROP TRIGGER IF EXISTS check_konyv_keres_ev');
+        //DB::statement(query: 'DROP TRIGGER IF EXISTS check_konyv_keres_ev');
     }
 };
