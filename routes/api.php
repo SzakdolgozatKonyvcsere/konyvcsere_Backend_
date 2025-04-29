@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdminStatsController;
 use App\Http\Controllers\BookDemandController;
 use App\Http\Controllers\BookOfferController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\ExchangeHistoryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\UserController;
@@ -81,6 +83,18 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
     Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
     Route::get('/users', [UserController::class, 'index']);
     Route::patch('/users/{id}/change-role', [UserController::class, "adminRoleChange"]);
+
+    Route::get('/admin/new-reg', [AdminStatsController::class, 'newRegistrationsStat']);
+    Route::get('/admin/logins', [AdminStatsController::class, 'loginsStat']);
+    Route::get('/admin/book-by-categ', [AdminStatsController::class, 'uploadsByCategoryStat']);
+    Route::get('/admin/upload-trend', [AdminStatsController::class, 'uploadsTrendStat']);
+    Route::get('/admin/exchange-closed', [AdminStatsController::class, 'closedExchangesStat']);
+    Route::get('/admin/exchange-succes-ratio', [AdminStatsController::class, 'exchangeSuccessRatioStat']);
+    Route::get('/admin/exchange-avg-time', [AdminStatsController::class, 'avgExchangeTimeStat']);
+    Route::get('/admin/book-top', [AdminStatsController::class, 'topBooksStat']);
+    Route::get('/admin/author-genre-top', [AdminStatsController::class, 'topAuthorsGenresStat']);
+
+
 });
 
 
