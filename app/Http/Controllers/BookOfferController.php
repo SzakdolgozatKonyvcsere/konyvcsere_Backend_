@@ -69,7 +69,7 @@ class BookOfferController extends Controller
         return response()->json($books);
     }
 
-    public function viewGetBookOffersAdmin(Request $request)
+    /*public function viewGetBookOffersAdmin(Request $request)
     {
         $page = max(1, (int) $request->query('page_number', 1)); // Pagination's default value (1st page)
         $limit = max(1, (int) $request->query('limit', 5));
@@ -80,6 +80,25 @@ class BookOfferController extends Controller
             ->get();
 
         return response()->json($books);
+    }*/
+    public function viewGetBookOffersAdmin(Request $request)
+    {
+        $book_info = DB::select("
+            SELECT bo.offer_id, u.name, bo.img_url, p.publisher_name, w.title, g.genre_name, language, publication_year, quality, book_status, bo.created_at, bo.updated_at, 
+                (SELECT GROUP_CONCAT(a.author_name SEPARATOR \", \") 
+                FROM written_bies wb 
+                LEFT JOIN authors a ON a.author_id = wb.author
+                WHERE wb.work = w.work_id) AS authors, bo.created_at, bo.updated_at
+            FROM book_offers bo
+                LEFT JOIN users u on u.id = bo.user
+                LEFT JOIN publishers p on p.publisher_id = bo.publisher
+                LEFT JOIN works w on w.work_id = bo.work
+                LEFT JOIN genres g on g.genre_id = w.genre_id
+            WHERE bo.book_status != 'x'
+            ORDER BY bo.book_status ASC
+        ");
+
+        return response()->json($book_info);
     }
 
     public function mostExchangedGenre()
