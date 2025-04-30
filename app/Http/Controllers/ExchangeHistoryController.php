@@ -283,45 +283,97 @@ class ExchangeHistoryController extends Controller
         return response()->json(['message' => 'Sikeres törlés (soft delete).'], 200);
     }
 
+    //összes cserefolyamat
     public function allExchangedBooksForAdmin()
     {
-            $exchanges = DB::table('exchange_histories as e')
-                ->join('users as requester', 'e.interested_user', '=', 'requester.id') // Érdeklődő
-                ->join('book_offers as desired', 'e.desired_item', '=', 'desired.offer_id')
-                ->join('works as desired_work', 'desired.work', '=', 'desired_work.work_id')
-                ->join('users as desired_owner', 'desired.user', '=', 'desired_owner.id')
-        
-                ->leftJoin('book_offers as offered', 'e.offered_item', '=', 'offered.offer_id')
-                ->leftJoin('works as offered_work', 'offered.work', '=', 'offered_work.work_id')
-                ->leftJoin('users as offered_owner', 'offered.user', '=', 'offered_owner.id')
-        
-                ->where('e.exchange_status', 'a')
-        
-                ->select([
-                    'e.exchange_id',
-                    'e.created_at',
-        
-                    // Érdeklődő
-                    'requester.name as requester_name',
-                    'requester.email as requester_email',
-        
-                    // Kért könyv + tulaj
-                    'desired_work.title as desired_book_title',
-                    'desired_owner.name as desired_owner_name',
-                    'desired_owner.email as desired_owner_email',
-                    'desired_owner.city as desired_owner_city',
-                    'desired_owner.tel as desired_owner_tel',
-        
-                    // Felajánlott könyv + tulaj
-                    'offered_work.title as offered_book_title',
-                    'offered_owner.name as offered_owner_name',
-                    'offered_owner.email as offered_owner_email',
-                    'offered_owner.city as offered_owner_city',
-                    'offered_owner.tel as offered_owner_tel',
-                ])
-                ->orderByDesc('e.created_at')
-                ->get();
-        
-            return response()->json($exchanges);
-        }
+        $exchanges = DB::table('exchange_histories as e')
+            ->join('users as requester', 'e.interested_user', '=', 'requester.id') // érdeklődő
+            ->join('book_offers as desired', 'e.desired_item', '=', 'desired.offer_id')
+            ->join('works as desired_work', 'desired.work', '=', 'desired_work.work_id')
+            ->join('users as desired_owner', 'desired.user', '=', 'desired_owner.id')
+
+            ->leftJoin('book_offers as offered', 'e.offered_item', '=', 'offered.offer_id')
+            ->leftJoin('works as offered_work', 'offered.work', '=', 'offered_work.work_id')
+            ->leftJoin('users as offered_owner', 'offered.user', '=', 'offered_owner.id')
+
+            ->where('e.exchange_status', 'a')
+
+            ->select([
+                'e.exchange_id',
+                'e.created_at',
+
+                // érdeklődő
+                'requester.name as requester_name',
+                'requester.email as requester_email',
+
+                // kért könyv + tulaj
+                'desired.offer_id as desired_book_id',
+                'desired_work.title as desired_book_title',
+                'desired_owner.name as desired_owner_name',
+                'desired_owner.email as desired_owner_email',
+                'desired_owner.city as desired_owner_city',
+                'desired_owner.tel as desired_owner_tel',
+
+                // felajánlott könyv + tulaj
+                'offered.offer_id as offered_book_id',
+                'offered_work.title as offered_book_title',
+                'offered_owner.name as offered_owner_name',
+                'offered_owner.email as offered_owner_email',
+                'offered_owner.city as offered_owner_city',
+                'offered_owner.tel as offered_owner_tel',
+            ])
+            ->orderByDesc('e.created_at')
+            ->get();
+
+        return response()->json($exchanges);
+    }
+
+    //email ellenőrzés
+    public function emailExchangeReport()
+    {
+        //érdeklődő a címzett
+        $exchanges = DB::table('exchange_histories as e')
+            ->join('users as requester', 'e.interested_user', '=', 'requester.id')
+            ->join('book_offers as desired', 'e.desired_item', '=', 'desired.offer_id')
+            ->join('users as desired_owner', 'desired.user', '=', 'desired_owner.id')
+            ->where('e.exchange_status', 'a')
+            ->select([
+                'e.exchange_id',
+                'e.updated_at as sent_time',
+    
+                'requester.name as recipient_name',
+                'requester.email as recipient_email',
+                'requester.tel as recipient_tel', // címzett telefonszám
+    
+                'desired_owner.name as partner_name',
+                'desired_owner.email as partner_email',
+                'desired_owner.tel as partner_tel', // másik fél telefonszám
+            ]);
+    
+        // visszafordított csere - az eredeti tulajdonos a címzett
+        $reverseExchanges = DB::table('exchange_histories as e')
+            ->join('users as requester', 'e.interested_user', '=', 'requester.id')
+            ->join('book_offers as desired', 'e.desired_item', '=', 'desired.offer_id')
+            ->join('users as desired_owner', 'desired.user', '=', 'desired_owner.id')
+            ->where('e.exchange_status', 'a')
+            ->select([
+                'e.exchange_id',
+                'e.updated_at as sent_time',
+    
+                'desired_owner.name as recipient_name',
+                'desired_owner.email as recipient_email',
+                'desired_owner.tel as recipient_tel', // címzett telefonszám
+    
+                'requester.name as partner_name',
+                'requester.email as partner_email',
+                'requester.tel as partner_tel', // másik fél telefonszám
+            ]);
+    
+        $result = $exchanges
+            ->unionAll($reverseExchanges)
+            ->orderByDesc('sent_time')
+            ->get();
+    
+        return response()->json($result);
+    }
 }
