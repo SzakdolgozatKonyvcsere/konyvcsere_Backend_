@@ -84,6 +84,8 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::patch('/users/{id}/change-role', [UserController::class, "adminRoleChange"]);
     Route::get('/exchanged-books', [ExchangeHistoryController::class, 'allExchangedBooksForAdmin']); //összes cserefolyamat adminnak
+    Route::get('/email-report', [ExchangeHistoryController::class, 'emailExchangeReport']);
+
 
     Route::get('/admin/new-reg', [AdminStatsController::class, 'newRegistrationsStat']);
     Route::get('/admin/logins', [AdminStatsController::class, 'loginsStat']);
