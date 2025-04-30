@@ -28,7 +28,6 @@ class AdminStatsController extends Controller
 
     /**
      * Bejelentkezések gyakorisága.
-     * Feltételezzük, hogy van login_histories tábla, amibe minden sikeres belépést logolunk.
      * GET /api/admin/stats/logins?interval=daily|weekly|monthly|yearly
      */
     public function loginsStat(Request $request)

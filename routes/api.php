@@ -94,6 +94,7 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
     Route::get('/admin/exchange-avg-time', [AdminStatsController::class, 'avgExchangeTimeStat']);
     Route::get('/admin/book-top', [AdminStatsController::class, 'topBooksStat']);
     Route::get('/admin/author-genre-top', [AdminStatsController::class, 'topAuthorsGenresStat']);
+    Route::get('/admin/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
 
 });
 
