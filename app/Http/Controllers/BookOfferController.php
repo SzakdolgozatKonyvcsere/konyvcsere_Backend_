@@ -94,7 +94,7 @@ class BookOfferController extends Controller
                 LEFT JOIN publishers p on p.publisher_id = bo.publisher
                 LEFT JOIN works w on w.work_id = bo.work
                 LEFT JOIN genres g on g.genre_id = w.genre_id
-            WHERE bo.book_status != 'x'
+            WHERE bo.book_status != 'x' AND bo.book_status != 'e'
             ORDER BY bo.book_status ASC
         ");
 
