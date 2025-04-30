@@ -68,7 +68,7 @@ class Book_OffersTableSeeder extends Seeder
                 'created_at' => '2025-02-02 15:45:35',
                 'updated_at' => '2025-02-02 15:50:20'
             ],
-            [
+            /*[
                 'user' => User::where('id', 2)->value('id'),
                 'publisher' => Publisher::where('publisher_name', 'Magvető')->value('publisher_id'),
                 'work' => Work::where('work_id', 5)->value('work_id'),
@@ -79,7 +79,7 @@ class Book_OffersTableSeeder extends Seeder
                 'img_url' => 'books_pictures/UtasEsHoldvilagSzerb.jpg',
                 'created_at' => '2025-02-13 10:30:33',
                 'updated_at' => '2025-02-13 10:30:33'
-            ],
+            ],*/
             [
                 'user' => User::where('id', 2)->value('id'),
                 'publisher' => Publisher::where('publisher_name', 'Laulin')->value('publisher_id'),

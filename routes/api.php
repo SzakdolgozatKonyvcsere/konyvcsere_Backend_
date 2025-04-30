@@ -80,9 +80,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::middleware(['auth:sanctum', Admin::class])->group(function () {
     // all users
-    Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); // Existing books - non-demand ones - for admin
+    Route::get('/book-offers', [BookOfferController::class, 'viewGetBookOffersAdmin']); 
     Route::get('/users', [UserController::class, 'index']);
     Route::patch('/users/{id}/change-role', [UserController::class, "adminRoleChange"]);
+    Route::get('/exchanged-books', [ExchangeHistoryController::class, 'allExchangedBooksForAdmin']); //összes cserefolyamat adminnak
 
     Route::get('/admin/new-reg', [AdminStatsController::class, 'newRegistrationsStat']);
     Route::get('/admin/logins', [AdminStatsController::class, 'loginsStat']);
@@ -94,11 +95,8 @@ Route::middleware(['auth:sanctum', Admin::class])->group(function () {
     Route::get('/admin/book-top', [AdminStatsController::class, 'topBooksStat']);
     Route::get('/admin/author-genre-top', [AdminStatsController::class, 'topAuthorsGenresStat']);
 
-
 });
 
-
 Route::get('/new-book-offers', [BookOfferController::class, 'newBookOffers']); // vendegeknek kezdolapra
-Route::get('/exchanged-books', [ExchangeHistoryController::class, 'allExchangedBooksForAdmin']); //összes cserefolyamat adminnak
 
 
