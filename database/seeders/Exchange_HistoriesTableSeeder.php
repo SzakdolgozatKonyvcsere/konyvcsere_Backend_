@@ -42,14 +42,14 @@ class Exchange_HistoriesTableSeeder extends Seeder
                 'updated_at' => '2025-04-26 12:16:33'
             ],
             //
-            [
+            /*[
                 'interested_user' => User::where('id', 2)->value('id'),
                 'desired_item' => BookOffer::where('offer_id', 28)->value('offer_id'),
                 'offered_item' => BookOffer::where('offer_id', 20)->value('offer_id'),
                 'exchange_status' => 'a',
                 'created_at' => '2025-03-20 15:10:03',
                 'updated_at' => '2025-03-22 13:52:44'
-            ],
+            ],*/
             [
                 'interested_user' => User::where('id', 3)->value('id'),
                 'desired_item' => BookOffer::where('offer_id', 33)->value('offer_id'),

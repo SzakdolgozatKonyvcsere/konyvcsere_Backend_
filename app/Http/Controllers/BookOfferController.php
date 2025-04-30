@@ -122,7 +122,7 @@ class BookOfferController extends Controller
         $city = DB::table('exchange_histories as c')
             ->select('u.city', DB::raw('count(c.exchange_id) as exchange_number'))
             ->join('users as u', 'c.interested_user', '=', 'u.id')
-            ->where('c.exchange_status', 'függőben')
+            ->where('c.exchange_status', 'a')
             ->groupBy('u.city')
             ->orderByDesc(DB::raw('count(c.exchange_id)'))
             ->limit(1)

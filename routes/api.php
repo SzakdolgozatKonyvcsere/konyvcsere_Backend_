@@ -57,9 +57,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/most-exchanged-genre', [BookOfferController::class, 'mostExchangedGenre']);
 
-    Route::get('/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
-    Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']);
-    Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
+    Route::get('/admin/most-exchanged-city', [BookOfferController::class, 'mostExchangedCity']);
+    //Route::get('/book-quality-list', [BookOfferController::class, 'bookQualityList']);
+    //Route::get('/bad-quality-books', [BookOfferController::class, 'badQualityBooks']);
     Route::get('/exchanges/{user_id}', [UserController::class, 'givenUsersExchanges']);
     Route::get('/exchanges/{user_id}/{book_id}', [ExchangeHistoryController::class, 'givenUserBookExchange']);
 
