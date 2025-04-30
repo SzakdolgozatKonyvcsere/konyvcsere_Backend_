@@ -22,6 +22,69 @@ class WorkController extends Controller
             'genre_id' => 'required|exists:genres,genre_id',
             'title' => 'required|string|max:255',
             'publisher' => 'required|string|max:255',
+            'authors' => 'required|string|max:255',
+            'user' => 'required|exists:users,id',
+            'language' => 'required|string|max:255',
+            'publication_year' => 'required|integer',
+            'quality' => 'required|integer',
+            'img_url' => ['nullable', 'mimes:jpg,png,gif,jpeg,svg', 'max:5120'],
+        ]);
+
+        $genre = Genre::find($request->genre_id);
+
+        $work = Work::firstOrCreate([
+            'genre_id' => $genre->genre_id,
+            'title' => $request->title,
+        ]);
+
+
+        // Publisher keresése vagy létrehozzuk
+        $publisher = Publisher::firstOrCreate(['publisher_name' => $request->publisher]);
+
+        // A szerző és kép kezelése
+        $authors = array_map('trim', explode(',', $request['authors']));
+        $authorIds = [];
+        foreach ($authors as $authorName) {
+            if ($authorName === '') continue; // véd a ", "-től
+            $author = Author::firstOrCreate(['author_name' => $authorName]);
+            $authorIds[] = $author->author_id;
+        }
+        $work->authors()->sync($authorIds);
+
+        // Fájlkezelés, ha van kép
+        if ($request->hasFile('img_url')) {
+            $image = $request->file('img_url');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('books_pictures'), $imageName);
+            $imagePath = 'books_pictures/' . $imageName;
+        } else {
+            $imagePath = null;
+        }
+
+        // Könyv (BookOffer) adatainak mentése
+        $book = BookOffer::create([
+            'user' => $request->user,
+            'publisher' => $publisher->publisher_id,
+            'work' => $work->work_id,
+            'language' => $request->language,
+            'publication_year' => $request->publication_year,
+            'quality' => $request->quality,
+            'book_status' => 's', // Szabad státusz alapértelmezetten 
+            'img_url' => $imagePath,
+        ]);
+
+        return response()->json([
+            'book' => $book,
+        ]);
+    }
+/*
+    public function store(Request $request)
+    {
+        // Validáció
+        $request->validate([
+            'genre_id' => 'required|exists:genres,genre_id',
+            'title' => 'required|string|max:255',
+            'publisher' => 'required|string|max:255',
             'author' => 'required|string|max:255',
             'user' => 'required|exists:users,id',
             'language' => 'required|string|max:255',
@@ -76,5 +139,5 @@ class WorkController extends Controller
         return response()->json([
             'book' => $book,
         ]);
-    }
+    }*/
 }
